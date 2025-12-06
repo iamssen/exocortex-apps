@@ -7,8 +7,5 @@ export default defineConfig({
     environment: 'node',
     include: ['src/**/*.test.ts'],
     exclude: ['**/node_modules/**', '**/dist/**', '**/*.browser-test.ts'],
-    env: {
-      MOCKUP: 'true',
-    },
   },
 });

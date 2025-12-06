@@ -11,9 +11,6 @@ export default defineConfig({
     https: {
       cert: process.env.LOCALHOST_HTTPS_CERT,
       key: process.env.LOCALHOST_HTTPS_KEY,
-      // @ts-expect-error maxSessionMemory is not in the type definition
-      maxSessionMemory: 100,
-      peerMaxConcurrentStreams: 300,
     },
   },
   build: {
