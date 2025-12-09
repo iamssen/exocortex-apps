@@ -12,7 +12,7 @@ type Routes = {
   };
 };
 
-const API_ENDPOINT = 'https://192.168.1.98:9999';
+const API_ENDPOINT = process.env.API_ENDPOINT ?? 'https://192.168.1.98:9999';
 
 async function queryFn(ctx: QueryFunctionContext<[string]>): Promise<any> {
   const path = ctx.queryKey[0];
