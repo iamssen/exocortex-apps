@@ -1,4 +1,4 @@
-import { useFormat } from '@iamssen/format';
+import { useFormat } from '@iamssen/exocortex-appkit/format';
 import { useQuery } from '@tanstack/react-query';
 import {
   CartesianChart,

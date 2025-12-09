@@ -1,5 +1,5 @@
 import type { ExpiryData, Quote } from '@iamssen/exocortex';
-import { Format, FormatConfig } from '@iamssen/format';
+import { Format, FormatConfig } from '@iamssen/exocortex-appkit/format';
 import type { ExtendedSummary } from '@ui/data-utils';
 import type { DetailedHTMLProps, HTMLAttributes, ReactNode } from 'react';
 import { Fragment } from 'react';

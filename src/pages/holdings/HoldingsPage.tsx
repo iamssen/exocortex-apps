@@ -1,4 +1,4 @@
-import { FormatConfig } from '@iamssen/format';
+import { FormatConfig } from '@iamssen/exocortex-appkit/format';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@ui/query';
 import type { ReactNode } from 'react';

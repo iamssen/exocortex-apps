@@ -4,8 +4,8 @@ import type {
   QuoteHistory,
   QuoteRecord,
 } from '@iamssen/exocortex';
+import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
 import { findStartIndex } from '@iamssen/exocortex/date-utils';
-import type { CurrencyType } from '@iamssen/format';
 import type {
   CartesianChartAxis,
   HistoryLineData,

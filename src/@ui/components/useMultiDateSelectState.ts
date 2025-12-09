@@ -1,5 +1,5 @@
 import type { Iso8601 } from '@iamssen/exocortex';
-import { useLocalStorageJson } from '@iamssen/use-local-storage';
+import { useLocalStorageJson } from '@iamssen/exocortex-appkit/use-local-storage';
 import { useMemo } from 'react';
 
 export function useMultiDateSelectState(

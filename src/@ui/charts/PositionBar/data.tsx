@@ -1,5 +1,5 @@
-import type { CurrencyType } from '@iamssen/format';
-import { format } from '@iamssen/format';
+import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
+import { format } from '@iamssen/exocortex-appkit/format';
 import type {
   BarMarker,
   CartesianChartAxis,

@@ -4,13 +4,13 @@ import type {
   Quote,
   Watch,
 } from '@iamssen/exocortex';
+import { Format } from '@iamssen/exocortex-appkit/format';
 import {
   evaluateWatchConditions,
   hasMatchHigh,
   hasMatchLow,
   joinQuoteStatisticsAndQuote,
 } from '@iamssen/exocortex/projector';
-import { Format } from '@iamssen/format';
 import { useQuery } from '@tanstack/react-query';
 import { useQuoteInfo, useQuotes, useQuoteStatistics } from '@ui/data-utils';
 import { api } from '@ui/query';

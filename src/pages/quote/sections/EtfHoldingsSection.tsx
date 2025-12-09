@@ -1,6 +1,6 @@
 import type { QuoteEtfHolding } from '@iamssen/exocortex';
+import { Format } from '@iamssen/exocortex-appkit/format';
 import { joinQuoteStatisticsAndQuote } from '@iamssen/exocortex/projector';
-import { Format } from '@iamssen/format';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@ui/query';
 import { type ReactNode, useMemo } from 'react';

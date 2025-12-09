@@ -1,5 +1,5 @@
 import type { MoneybookHistory } from '@iamssen/exocortex';
-import { Format } from '@iamssen/format';
+import { Format } from '@iamssen/exocortex-appkit/format';
 import type { Column } from 'react-data-grid';
 import { Link } from 'react-router';
 

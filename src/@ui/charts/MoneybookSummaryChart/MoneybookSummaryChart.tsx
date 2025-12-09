@@ -1,4 +1,4 @@
-import type { FormatFunction } from '@iamssen/format';
+import type { FormatFunction } from '@iamssen/exocortex-appkit/format';
 import { useQuery } from '@tanstack/react-query';
 import type {
   CartesianChartProps,

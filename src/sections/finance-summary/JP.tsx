@@ -1,5 +1,5 @@
 import type { JoinedHoldings } from '@iamssen/exocortex';
-import { Format } from '@iamssen/format';
+import { Format } from '@iamssen/exocortex-appkit/format';
 import { MarketStateSymbol } from '@ui/components';
 import { useJoinedQuoteHistory } from '@ui/data-utils';
 import type { ReactNode } from 'react';

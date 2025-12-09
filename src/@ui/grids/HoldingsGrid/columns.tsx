@@ -1,6 +1,6 @@
 import type { JoinedHolding, PortfolioMarket } from '@iamssen/exocortex';
-import type { CurrencyType } from '@iamssen/format';
-import { Evaluate, Format } from '@iamssen/format';
+import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
+import { Evaluate, Format } from '@iamssen/exocortex-appkit/format';
 import { MarketStateSymbol } from '@ui/components';
 import type { CSSProperties } from 'react';
 import type { Column } from 'react-data-grid';

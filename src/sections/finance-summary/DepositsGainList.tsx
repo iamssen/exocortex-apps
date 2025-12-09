@@ -1,7 +1,7 @@
 import type { DepositsGain } from '@iamssen/exocortex';
+import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
+import { Format } from '@iamssen/exocortex-appkit/format';
 import { reduceDepositsGain } from '@iamssen/exocortex/projector';
-import type { CurrencyType } from '@iamssen/format';
-import { Format } from '@iamssen/format';
 import { Fragment, type ReactNode, useMemo } from 'react';
 
 export interface DepositsGainListProps {

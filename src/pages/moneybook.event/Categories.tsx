@@ -1,5 +1,5 @@
 import type { MoneybookHistory } from '@iamssen/exocortex';
-import { Format } from '@iamssen/format';
+import { Format } from '@iamssen/exocortex-appkit/format';
 import type { ScaleOrdinal } from 'd3-scale';
 import { type ReactNode, useMemo } from 'react';
 import styles from './MoneybookEventPage.module.css';

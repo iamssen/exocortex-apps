@@ -1,5 +1,5 @@
-import { getFlag } from '@iamssen/country-code';
-import { useLocalStorageJson } from '@iamssen/use-local-storage';
+import { Flag } from '@iamssen/exocortex-appkit/country-code';
+import { useLocalStorageJson } from '@iamssen/exocortex-appkit/use-local-storage';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@ui/query';
 import { DateTime } from 'luxon';
@@ -82,7 +82,9 @@ export function JournalNewPage(): ReactNode {
         <div>
           <h2>Reverse Geocoding Result:</h2>
           <pre>{JSON.stringify(rego, null, 2)}</pre>
-          <div>Country Flag: {getFlag(rego.countryCode)}</div>
+          <div>
+            Country Flag: <Flag countryCode={rego.countryCode} />
+          </div>
         </div>
       ) : (
         coords && <div>Getting the reverse geocoding data&hellip; </div>

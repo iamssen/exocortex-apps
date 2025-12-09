@@ -1,6 +1,6 @@
 import type { JoinedTrade, PortfolioMarket } from '@iamssen/exocortex';
-import type { CurrencyType } from '@iamssen/format';
-import { Format } from '@iamssen/format';
+import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
+import { Format } from '@iamssen/exocortex-appkit/format';
 import type { Column } from 'react-data-grid';
 import { Link } from 'react-router';
 import styles from '../styles.module.css';

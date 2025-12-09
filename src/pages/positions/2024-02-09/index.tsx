@@ -1,4 +1,4 @@
-import { Format } from '@iamssen/format';
+import { Format } from '@iamssen/exocortex-appkit/format';
 import { useQuery } from '@tanstack/react-query';
 import { PositionBar } from '@ui/charts';
 import { TradesGrid } from '@ui/grids';

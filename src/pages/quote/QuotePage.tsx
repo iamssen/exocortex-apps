@@ -1,11 +1,11 @@
 import type { Iso8601, JoinedTrade } from '@iamssen/exocortex';
+import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
+import { Format } from '@iamssen/exocortex-appkit/format';
 import {
   joinHoldingAndQuote,
   joinQuoteStatisticsAndQuote,
   joinTradesAndQuotes,
 } from '@iamssen/exocortex/projector';
-import type { CurrencyType } from '@iamssen/format';
-import { Format } from '@iamssen/format';
 import { useQuery } from '@tanstack/react-query';
 import { QuoteChart } from '@ui/charts';
 import {

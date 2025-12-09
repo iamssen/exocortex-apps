@@ -1,4 +1,4 @@
-import { useFormat } from '@iamssen/format';
+import { useFormat } from '@iamssen/exocortex-appkit/format';
 import type { ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
 import type { CartesianChartAxis } from './CartesianChart.tsx';

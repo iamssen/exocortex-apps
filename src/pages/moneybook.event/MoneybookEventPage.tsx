@@ -1,4 +1,4 @@
-import { Format, FormatConfig } from '@iamssen/format';
+import { Format, FormatConfig } from '@iamssen/exocortex-appkit/format';
 import { useQuery } from '@tanstack/react-query';
 import { EventExpensesChart } from '@ui/charts';
 import { FilterTextForm } from '@ui/components';

@@ -1,4 +1,4 @@
-import { Format } from '@iamssen/format';
+import { Format } from '@iamssen/exocortex-appkit/format';
 import type { ExtendedSummary } from '@ui/data-utils';
 import type { DetailedHTMLProps, HTMLAttributes, ReactNode } from 'react';
 

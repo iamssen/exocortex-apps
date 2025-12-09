@@ -1,10 +1,10 @@
 import type { Iso8601 } from '@iamssen/exocortex';
+import { useElementIntersection } from '@iamssen/exocortex-appkit/use-element-intersection';
 import {
   evaluateWatchConditions,
   hasMatchHigh,
   hasMatchLow,
 } from '@iamssen/exocortex/projector';
-import { useElementIntersection } from '@iamssen/use-element-intersection';
 import { useQuery } from '@tanstack/react-query';
 import { QuoteChart } from '@ui/charts';
 import { QuoteLinkIcons } from '@ui/components';

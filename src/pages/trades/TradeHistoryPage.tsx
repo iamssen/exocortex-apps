@@ -3,12 +3,12 @@ import type {
   JoinedTrade,
   PortfolioMarket,
 } from '@iamssen/exocortex';
+import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
+import { FormatConfig } from '@iamssen/exocortex-appkit/format';
 import {
   aggregateTrades,
   joinTradesAndQuotes,
 } from '@iamssen/exocortex/projector';
-import type { CurrencyType } from '@iamssen/format';
-import { FormatConfig } from '@iamssen/format';
 import { useQuery } from '@tanstack/react-query';
 import { TradeAmountChart } from '@ui/charts';
 import { useQuotes } from '@ui/data-utils';
