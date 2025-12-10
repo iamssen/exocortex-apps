@@ -25,7 +25,7 @@ export function EquityValueHistorySection({
 
   const { data: dataBenchmark } = useQuery(api('finance/sp500-pe'));
 
-  const { data: financeData } = useQuery(api('portfolio'));
+  const { data: portfolio } = useQuery(api('portfolio'));
 
   const data = useMemo(() => {
     if (!historyData?.records || historyData.records.length === 0) {
@@ -52,7 +52,7 @@ export function EquityValueHistorySection({
   }, [currentPe, historyData]);
 
   const watches = useMemo(() => {
-    const watch = financeData?.watches[symbol];
+    const watch = portfolio?.watches[symbol];
 
     return watch
       ?.map<PriceLineData | undefined>((w) => {
@@ -71,7 +71,7 @@ export function EquityValueHistorySection({
         }
       })
       .filter((price) => !!price);
-  }, [financeData?.watches, symbol]);
+  }, [portfolio?.watches, symbol]);
 
   if (!data || data.length === 0) {
     return null;

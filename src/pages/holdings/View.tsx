@@ -25,13 +25,13 @@ import styles from './HoldingsPage.module.css';
 export interface ViewProps {
   currency: CurrencyType;
   krwExchangeRate?: Quote;
-  portfolio: PortfolioMarket;
+  market: PortfolioMarket;
   printDisplayName?: boolean;
 }
 
 export function View({
   currency,
-  portfolio,
+  market,
   krwExchangeRate,
   printDisplayName,
 }: ViewProps): ReactNode {
@@ -54,12 +54,12 @@ export function View({
   const symbols = useMemo(() => {
     if (financeData) {
       return config.includeNonHoldings
-        ? financeData.holdings[portfolio].symbols
-        : financeData.holdings[portfolio].holdSymbols;
+        ? financeData.holdings[market].symbols
+        : financeData.holdings[market].holdSymbols;
     } else {
       return [];
     }
-  }, [config.includeNonHoldings, financeData, portfolio]);
+  }, [config.includeNonHoldings, financeData, market]);
 
   const quotes = useQuotes(symbols);
   const statistics = useQuoteStatistics(symbols);
@@ -67,17 +67,17 @@ export function View({
   const holdings = useMemo(() => {
     return financeData
       ? joinHoldingsAndQuotes(
-          financeData.holdings[portfolio].list,
+          financeData.holdings[market].list,
           quotes,
           statistics,
         )
       : undefined;
-  }, [financeData, portfolio, quotes, statistics]);
+  }, [financeData, market, quotes, statistics]);
 
   const market52WeekBenchmark = useMemo<
     JoinedQuoteStatistics | undefined
   >(() => {
-    switch (portfolio) {
+    switch (market) {
       case 'fx': {
         return holdings?.holdings.find(
           ({ holding }) => holding.symbol === 'KRW=X',
@@ -99,7 +99,7 @@ export function View({
         )?.statistic;
       }
     }
-  }, [holdings, portfolio]);
+  }, [holdings, market]);
 
   return (
     <>
@@ -262,7 +262,7 @@ export function View({
               <li>Price</li>
             </ul>
           </button>
-          {(portfolio === 'us' || portfolio === 'kr' || portfolio === 'jp') && (
+          {(market === 'us' || market === 'kr' || market === 'jp') && (
             <>
               <button
                 role="tab"
@@ -284,7 +284,7 @@ export function View({
               </button>
             </>
           )}
-          {(portfolio === 'us' || portfolio === 'jp') && (
+          {(market === 'us' || market === 'jp') && (
             <button
               role="tab"
               aria-selected={perspective === 'beta'}
@@ -327,10 +327,10 @@ export function View({
       {holdings?.holdings && (
         <Scope value={{ totalMarketValue: holdings.gain.marketValue }}>
           <HoldingsGrid
-            key={portfolio}
+            key={market}
             className={styles.grid}
             rows={holdings.holdings}
-            portfolio={portfolio}
+            portfolio={market}
             perspective={perspective}
             currency={currency}
             printDisplayName={printDisplayName}

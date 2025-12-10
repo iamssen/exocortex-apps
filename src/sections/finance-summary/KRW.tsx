@@ -13,7 +13,7 @@ export interface KRWProps extends DetailedHTMLProps<
   HTMLAttributes<HTMLElement>,
   HTMLElement
 > {
-  financeData: Portfolio;
+  portfolio: Portfolio;
   view: 'simple' | 'detail';
 }
 
@@ -21,32 +21,32 @@ function getCouponTax(amount: number): K {
   return (amount * 0.154) as K;
 }
 
-export function KRW({ financeData, view, ...props }: KRWProps): ReactNode {
+export function KRW({ portfolio, view, ...props }: KRWProps): ReactNode {
   const staledBondsGain = useMemo(() => {
     return new Map([
       [
         new Date().getFullYear(),
         sumBondsGain(
-          financeData.bonds.kr.list,
+          portfolio.bonds.kr.list,
           DateTime.now().startOf('year').toISODate() as Iso8601,
           DateTime.now().toISODate() as Iso8601,
         ),
       ],
     ]);
-  }, [financeData.bonds.kr.list]);
+  }, [portfolio.bonds.kr.list]);
 
   const staledDepositsGain = useMemo(() => {
     return new Map([
       [
         new Date().getFullYear(),
         sumDepositsGain(
-          financeData.deposits.kr.list,
+          portfolio.deposits.kr.list,
           DateTime.now().startOf('year').toISODate() as Iso8601,
           DateTime.now().toISODate() as Iso8601,
         ),
       ],
     ]);
-  }, [financeData.deposits.kr.list]);
+  }, [portfolio.deposits.kr.list]);
 
   return (
     <section {...props}>
@@ -58,19 +58,19 @@ export function KRW({ financeData, view, ...props }: KRWProps): ReactNode {
           <Format
             format="KRW"
             n={
-              financeData.balances.krw.totalAmount +
-              financeData.housing.totalAmount +
-              financeData.deposits.kr.totalAmount +
-              financeData.bonds.kr.totalPurchasePrice
+              portfolio.balances.krw.totalAmount +
+              portfolio.housing.totalAmount +
+              portfolio.deposits.kr.totalAmount +
+              portfolio.bonds.kr.totalPurchasePrice
             }
           />
         </dd>
         <dt>Balances</dt>
         <dd>
-          <Format format="KRW" n={financeData.balances.krw.totalAmount} />
+          <Format format="KRW" n={portfolio.balances.krw.totalAmount} />
         </dd>
         {view === 'detail' &&
-          financeData.balances.krw.list.map(({ name, amount }) => (
+          portfolio.balances.krw.list.map(({ name, amount }) => (
             <Fragment key={`krw-balance-${name}`}>
               <dt data-depth="1">{name}</dt>
               <dd>
@@ -80,17 +80,17 @@ export function KRW({ financeData, view, ...props }: KRWProps): ReactNode {
           ))}
         <dt>Deposits</dt>
         <dd>
-          <Format format="KRW" n={financeData.deposits.kr.totalAmount} />
+          <Format format="KRW" n={portfolio.deposits.kr.totalAmount} />
         </dd>
         {view === 'simple' && (
           <DepositsGainList
-            gain={financeData.deposits.kr.gain}
+            gain={portfolio.deposits.kr.gain}
             staledGain={staledDepositsGain}
             currency="KRW"
           />
         )}
         {view === 'detail' &&
-          financeData.deposits.kr.list.map(
+          portfolio.deposits.kr.list.map(
             ({ name, end, amount, interestIncome }) => (
               <Fragment key={`kr-depogit-${name}-${end}`}>
                 <dt data-depth="1">
@@ -110,25 +110,25 @@ export function KRW({ financeData, view, ...props }: KRWProps): ReactNode {
           )}
         <dt>Bonds</dt>
         <dd>
-          <Format format="KRW" n={financeData.bonds.kr.totalAmount} />
+          <Format format="KRW" n={portfolio.bonds.kr.totalAmount} />
         </dd>
         {view === 'simple' && (
           <BondsGainList
-            gain={financeData.bonds.kr.gain}
+            gain={portfolio.bonds.kr.gain}
             staledGain={staledBondsGain}
             currency="KRW"
           />
         )}
         {view === 'detail' && (
           <BondsList
-            list={financeData.bonds.kr.list}
+            list={portfolio.bonds.kr.list}
             currency="KRW"
             getCouponTax={getCouponTax}
           />
         )}
         <dt>Housing</dt>
         <dd>
-          <Format format="KRW" n={financeData.housing.totalAmount} />
+          <Format format="KRW" n={portfolio.housing.totalAmount} />
         </dd>
       </dl>
     </section>

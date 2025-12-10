@@ -10,18 +10,14 @@ export function TradesPage(): ReactNode {
       <Route
         path="us"
         element={
-          <TradeHistoryPage
-            portfolio="us"
-            currency="USD"
-            benchmarkSymbol="SPY"
-          />
+          <TradeHistoryPage market="us" currency="USD" benchmarkSymbol="SPY" />
         }
       />
       <Route
         path="kr"
         element={
           <TradeHistoryPage
-            portfolio="kr"
+            market="kr"
             currency="KRW"
             benchmarkSymbol="SPY"
             printDisplayName
@@ -32,7 +28,7 @@ export function TradesPage(): ReactNode {
         path="jp"
         element={
           <TradeHistoryPage
-            portfolio="jp"
+            market="jp"
             currency="JPY"
             benchmarkSymbol="SPY"
             printDisplayName
@@ -42,18 +38,14 @@ export function TradesPage(): ReactNode {
       <Route
         path="fx"
         element={
-          <TradeHistoryPage
-            portfolio="fx"
-            currency="KRW"
-            benchmarkSymbol="SPY"
-          />
+          <TradeHistoryPage market="fx" currency="KRW" benchmarkSymbol="SPY" />
         }
       />
       <Route
         path="crypto"
         element={
           <TradeHistoryPage
-            portfolio="crypto"
+            market="crypto"
             currency="USD"
             benchmarkSymbol="SPY"
           />

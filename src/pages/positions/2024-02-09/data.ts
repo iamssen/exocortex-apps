@@ -12,19 +12,19 @@ const INITIAL_SELL = '2024-02-09';
 const REBUY_AFTER_DROP = '2025-04-07';
 
 export function usePosition(): PositionTrades | undefined {
-  const { data: financeData } = useQuery(api(`portfolio`));
+  const { data: portfolio } = useQuery(api(`portfolio`));
 
   const targetTrades = useMemo(() => {
-    if (!financeData) {
+    if (!portfolio) {
       return undefined;
     }
 
-    const sliceFrom = financeData.holdings.us.trades.findLastIndex(
+    const sliceFrom = portfolio.holdings.us.trades.findLastIndex(
       ({ date }) => date < INITIAL_SELL,
     );
 
-    return financeData.holdings.us.trades.slice(sliceFrom);
-  }, [financeData]);
+    return portfolio.holdings.us.trades.slice(sliceFrom);
+  }, [portfolio]);
 
   const symbols = useMemo(() => {
     return targetTrades

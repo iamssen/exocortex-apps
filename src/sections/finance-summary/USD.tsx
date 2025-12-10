@@ -13,11 +13,11 @@ export interface USDProps extends DetailedHTMLProps<
   HTMLAttributes<HTMLElement>,
   HTMLElement
 > {
-  financeData: Portfolio;
+  portfolio: Portfolio;
   view: 'simple' | 'detail';
 }
 
-export function USD({ financeData, view, ...props }: USDProps): ReactNode {
+export function USD({ portfolio, view, ...props }: USDProps): ReactNode {
   const { data: usdkrw } = useQuery(api('finance/quote/KRW=X'));
 
   const getCouponTax = usdkrw
@@ -28,7 +28,7 @@ export function USD({ financeData, view, ...props }: USDProps): ReactNode {
     [
       new Date().getFullYear(),
       sumBondsGain(
-        financeData.bonds.us.list,
+        portfolio.bonds.us.list,
         DateTime.now().startOf('year').toISODate() as Iso8601,
         DateTime.now().toISODate() as Iso8601,
       ),
@@ -45,17 +45,17 @@ export function USD({ financeData, view, ...props }: USDProps): ReactNode {
           <Format
             format="USD"
             n={
-              financeData.balances.usd.totalAmount +
-              financeData.bonds.us.totalPurchasePrice
+              portfolio.balances.usd.totalAmount +
+              portfolio.bonds.us.totalPurchasePrice
             }
           />
         </dd>
         <dt>Balances</dt>
         <dd>
-          <Format format="USD" n={financeData.balances.usd.totalAmount} />
+          <Format format="USD" n={portfolio.balances.usd.totalAmount} />
         </dd>
         {view === 'detail' &&
-          financeData.balances.usd.list.map(({ name, amount }) => (
+          portfolio.balances.usd.list.map(({ name, amount }) => (
             <Fragment key={`usd-balance-${name}`}>
               <dt data-depth="1">{name}</dt>
               <dd>
@@ -65,18 +65,18 @@ export function USD({ financeData, view, ...props }: USDProps): ReactNode {
           ))}
         <dt>Bonds</dt>
         <dd>
-          <Format format="USD" n={financeData.bonds.us.totalAmount} />
+          <Format format="USD" n={portfolio.bonds.us.totalAmount} />
         </dd>
         {view === 'simple' && (
           <BondsGainList
-            gain={financeData.bonds.us.gain}
+            gain={portfolio.bonds.us.gain}
             staledGain={staledBondsGain}
             currency="USD"
           />
         )}
         {view === 'detail' && (
           <BondsList
-            list={financeData.bonds.us.list}
+            list={portfolio.bonds.us.list}
             currency="USD"
             getCouponTax={getCouponTax}
           />

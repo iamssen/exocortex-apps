@@ -21,34 +21,34 @@ import styles from './TradeHistoryPage.module.css';
 export interface TradeHistoryPageProps {
   currency: CurrencyType;
   benchmarkSymbol: string;
-  portfolio: PortfolioMarket;
+  market: PortfolioMarket;
   printDisplayName?: boolean;
 }
 
 export function TradeHistoryPage({
   currency,
-  portfolio,
+  market,
   benchmarkSymbol,
   printDisplayName,
 }: TradeHistoryPageProps): ReactNode {
-  const { data: financeData } = useQuery(api(`portfolio`));
+  const { data: portfolio } = useQuery(api(`portfolio`));
 
   const { data: benchmarkHistory } = useQuery(
     api(`finance/quote-history/${benchmarkSymbol}`),
   );
 
   const symbols = useMemo(
-    () => financeData?.holdings[portfolio].symbols ?? [],
-    [financeData?.holdings, portfolio],
+    () => portfolio?.holdings[market].symbols ?? [],
+    [portfolio?.holdings, market],
   );
 
   const quotes = useQuotes(symbols);
 
   const trades = useMemo<JoinedTrade[] | undefined>(() => {
-    return financeData
-      ? joinTradesAndQuotes(financeData.holdings[portfolio].trades, quotes)
+    return portfolio
+      ? joinTradesAndQuotes(portfolio.holdings[market].trades, quotes)
       : undefined;
-  }, [financeData, portfolio, quotes]);
+  }, [portfolio, market, quotes]);
 
   const aggregated = useMemo<AggregatedTrade[] | undefined>(() => {
     return trades ? aggregateTrades(trades) : undefined;
@@ -68,9 +68,9 @@ export function TradeHistoryPage({
         {trades && (
           <TradesGrid
             role="grid"
-            key={portfolio}
+            key={market}
             currency={currency}
-            portfolio={portfolio}
+            portfolio={market}
             printDisplayName={printDisplayName}
             rows={trades}
           />

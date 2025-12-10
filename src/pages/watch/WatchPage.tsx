@@ -20,18 +20,18 @@ import { Page } from '../../Page.tsx';
 import styles from './WatchPage.module.css';
 
 export function WatchPage(): ReactNode {
-  const { data: financeData } = useQuery(api('portfolio'));
+  const { data: portfolio } = useQuery(api('portfolio'));
 
   const symbols = useMemo(
-    () => Object.keys(financeData?.watches ?? {}),
-    [financeData?.watches],
+    () => Object.keys(portfolio?.watches ?? {}),
+    [portfolio?.watches],
   );
 
   const quotes = useQuotes(symbols);
   const statistics = useQuoteStatistics(symbols);
 
   const watches = useMemo<WatchItemProps[]>(() => {
-    return Object.entries(financeData?.watches ?? {})
+    return Object.entries(portfolio?.watches ?? {})
       .map(([symbol, watch]) => {
         const quote = quotes.get(symbol);
         const statistic = statistics.get(symbol);
@@ -59,7 +59,7 @@ export function WatchPage(): ReactNode {
       .toSorted((a, b) => {
         return b.matchScore - a.matchScore;
       });
-  }, [financeData?.watches, quotes, statistics]);
+  }, [portfolio?.watches, quotes, statistics]);
 
   return (
     <Page layout="scrollable" className={styles.container}>

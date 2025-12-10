@@ -73,7 +73,7 @@ function Component({ symbol }: { symbol: string }) {
 
   const info = useQuoteInfo(symbol);
 
-  const { data: financeData } = useQuery(api('portfolio'));
+  const { data: portfolio } = useQuery(api('portfolio'));
   const { data: quoteData } = useQuery(api(`finance/quote/${symbol}`));
   const { data: statisticData } = useQuery(
     api(`finance/quote-statistics/${symbol}`),
@@ -83,14 +83,14 @@ function Component({ symbol }: { symbol: string }) {
   );
 
   const holding = useMemo(() => {
-    return financeData && financeData.holdings.index[symbol]
+    return portfolio && portfolio.holdings.index[symbol]
       ? joinHoldingAndQuote(
-          financeData.holdings.index[symbol]!,
+          portfolio.holdings.index[symbol]!,
           quoteData,
           undefined,
         )
       : undefined;
-  }, [financeData, quoteData, symbol]);
+  }, [portfolio, quoteData, symbol]);
 
   const statistic = useMemo(() => {
     return statisticData && quoteData
@@ -99,13 +99,10 @@ function Component({ symbol }: { symbol: string }) {
   }, [quoteData, statisticData]);
 
   const trades = useMemo<JoinedTrade[] | undefined>(() => {
-    return financeData && financeData.holdings.index[symbol]
-      ? joinTradesAndQuotes(
-          financeData.holdings.index[symbol]!.trades,
-          quoteData,
-        )
+    return portfolio && portfolio.holdings.index[symbol]
+      ? joinTradesAndQuotes(portfolio.holdings.index[symbol]!.trades, quoteData)
       : undefined;
-  }, [financeData, quoteData, symbol]);
+  }, [portfolio, quoteData, symbol]);
 
   const printDisplayName = useMemo(
     () => info.portfolio === 'kr' || info.portfolio === 'jp',
@@ -120,9 +117,9 @@ function Component({ symbol }: { symbol: string }) {
           info={info}
           history={historyData}
           quote={quoteData}
-          watch={financeData?.watches[symbol]}
+          watch={portfolio?.watches[symbol]}
           statistic={statisticData}
-          trades={financeData?.holdings.index[symbol]?.trades}
+          trades={portfolio?.holdings.index[symbol]?.trades}
           style={{
             width: '100%',
             height: 'max(30vh, 250px)',

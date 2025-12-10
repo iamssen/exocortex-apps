@@ -18,33 +18,29 @@ export function HoldingsPage(): ReactNode {
           <Route
             path="us"
             element={
-              <View portfolio="us" currency="USD" krwExchangeRate={usdkrw} />
+              <View market="us" currency="USD" krwExchangeRate={usdkrw} />
             }
           />
           <Route
             path="kr"
-            element={<View portfolio="kr" currency="KRW" printDisplayName />}
+            element={<View market="kr" currency="KRW" printDisplayName />}
           />
           <Route
             path="jp"
             element={
               <View
-                portfolio="jp"
+                market="jp"
                 currency="JPY"
                 krwExchangeRate={jpykrw}
                 printDisplayName
               />
             }
           />
-          <Route path="fx" element={<View portfolio="fx" currency="KRW" />} />
+          <Route path="fx" element={<View market="fx" currency="KRW" />} />
           <Route
             path="crypto"
             element={
-              <View
-                portfolio="crypto"
-                currency="USD"
-                krwExchangeRate={usdkrw}
-              />
+              <View market="crypto" currency="USD" krwExchangeRate={usdkrw} />
             }
           />
           <Route path="*" element={<Navigate replace to="us" />} />

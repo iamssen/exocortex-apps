@@ -24,7 +24,7 @@ type CreateSimulation = (
 };
 
 export const createSimulation: (
-  financeData: Portfolio,
+  portfolio: Portfolio,
   principal: number,
   us: JoinedHoldings,
   kr: JoinedHoldings,
@@ -34,7 +34,7 @@ export const createSimulation: (
   currentUSDKRW: number,
   currentJPYKRW: number,
 ) => CreateSimulation | undefined = (
-  financeData: Portfolio,
+  portfolio: Portfolio,
   principal: number,
   us: JoinedHoldings,
   kr: JoinedHoldings,
@@ -49,13 +49,13 @@ export const createSimulation: (
         const rise = spyPrice / currentSPYPrice;
 
         const riskless =
-          financeData.balances.krw.totalAmount +
-          financeData.housing.totalAmount +
-          financeData.balances.usd.totalAmount * usd +
-          financeData.balances.jpy.totalAmount * jpy +
-          financeData.deposits.kr.totalAmount +
-          financeData.bonds.kr.totalPurchasePrice +
-          financeData.bonds.us.totalPurchasePrice * usd;
+          portfolio.balances.krw.totalAmount +
+          portfolio.housing.totalAmount +
+          portfolio.balances.usd.totalAmount * usd +
+          portfolio.balances.jpy.totalAmount * jpy +
+          portfolio.deposits.kr.totalAmount +
+          portfolio.bonds.kr.totalPurchasePrice +
+          portfolio.bonds.us.totalPurchasePrice * usd;
 
         const risk =
           kr.gain.marketValue +

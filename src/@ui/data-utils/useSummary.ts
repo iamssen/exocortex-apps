@@ -23,7 +23,7 @@ import { useOtherCurrenciesBalances } from './useOtherCurrenciesBalances.ts';
 import { useQuotes } from './useQuotes.ts';
 
 export interface SummaryValue {
-  financeData: Portfolio | undefined;
+  portfolio: Portfolio | undefined;
   usdkrw: Quote | undefined;
   jpykrw: Quote | undefined;
   quotes: Map<string, Quote>;
@@ -41,41 +41,40 @@ export interface SummaryValue {
 }
 
 export function useSummary(): SummaryValue {
-  const { data: financeData } = useQuery(api('portfolio'));
+  const { data: portfolio } = useQuery(api('portfolio'));
 
   const { data: usdkrw } = useQuery(api('finance/quote/KRW=X'));
   const { data: jpykrw } = useQuery(api('finance/quote/JPYKRW=X'));
 
   const otherCurrencies = useOtherCurrenciesBalances(
-    financeData?.balances.others,
+    portfolio?.balances.others,
   );
 
   const symbols = useMemo(
-    () => (financeData ? Object.keys(financeData.holdings.index) : []),
-    [financeData],
+    () => (portfolio ? Object.keys(portfolio.holdings.index) : []),
+    [portfolio],
   );
 
   const quotes = useQuotes(symbols);
 
   const us = useMemo(
-    () => joinHoldingsAndQuotes(financeData?.holdings.us.list ?? [], quotes),
-    [financeData?.holdings.us.list, quotes],
+    () => joinHoldingsAndQuotes(portfolio?.holdings.us.list ?? [], quotes),
+    [portfolio?.holdings.us.list, quotes],
   );
 
   const kr = useMemo(
-    () => joinHoldingsAndQuotes(financeData?.holdings.kr.list ?? [], quotes),
-    [financeData?.holdings.kr.list, quotes],
+    () => joinHoldingsAndQuotes(portfolio?.holdings.kr.list ?? [], quotes),
+    [portfolio?.holdings.kr.list, quotes],
   );
 
   const jp = useMemo(
-    () => joinHoldingsAndQuotes(financeData?.holdings.jp.list ?? [], quotes),
-    [financeData?.holdings.jp.list, quotes],
+    () => joinHoldingsAndQuotes(portfolio?.holdings.jp.list ?? [], quotes),
+    [portfolio?.holdings.jp.list, quotes],
   );
 
   const crypto = useMemo(
-    () =>
-      joinHoldingsAndQuotes(financeData?.holdings.crypto.list ?? [], quotes),
-    [financeData?.holdings.crypto.list, quotes],
+    () => joinHoldingsAndQuotes(portfolio?.holdings.crypto.list ?? [], quotes),
+    [portfolio?.holdings.crypto.list, quotes],
   );
 
   const otherCurrenciesTotalAmount = useMemo(
@@ -85,39 +84,39 @@ export function useSummary(): SummaryValue {
 
   const fxUSD = useMemo(
     () =>
-      financeData
+      portfolio
         ? joinFxAndQuote<USD>(
-            financeData.fx.usd,
-            financeData.balances.usd,
+            portfolio.fx.usd,
+            portfolio.balances.usd,
             undefined,
-            financeData.bonds.us,
+            portfolio.bonds.us,
             usdkrw,
           )
         : undefined,
-    [financeData, usdkrw],
+    [portfolio, usdkrw],
   );
 
   const fxJPY = useMemo(
     () =>
-      financeData
+      portfolio
         ? joinFxAndQuote<JPY>(
-            financeData.fx.jpy,
-            financeData.balances.jpy,
+            portfolio.fx.jpy,
+            portfolio.balances.jpy,
             undefined,
             undefined,
             jpykrw,
           )
         : undefined,
-    [financeData, jpykrw],
+    [portfolio, jpykrw],
   );
 
   const summary = useMemo(() => {
-    if (!usdkrw || !jpykrw || !financeData) {
+    if (!usdkrw || !jpykrw || !portfolio) {
       return undefined;
     }
 
     return createExtendedSummary(
-      financeData,
+      portfolio,
       usdkrw,
       jpykrw,
       us,
@@ -129,7 +128,7 @@ export function useSummary(): SummaryValue {
     );
   }, [
     crypto,
-    financeData,
+    portfolio,
     jp,
     jpykrw,
     kr,
@@ -140,7 +139,7 @@ export function useSummary(): SummaryValue {
   ]);
 
   return {
-    financeData,
+    portfolio,
     usdkrw,
     jpykrw,
     quotes,
@@ -195,7 +194,7 @@ export type ExtendedSummary = PortfolioSummary & {
 };
 
 function createExtendedSummary(
-  financeData: Portfolio,
+  portfolio: Portfolio,
   usdkrw: Quote,
   jpykrw: Quote,
   us: JoinedHoldings,
@@ -206,7 +205,7 @@ function createExtendedSummary(
   otherCurrenciesTotalAmount: KRW,
 ): ExtendedSummary {
   const summary = createSummary(
-    financeData,
+    portfolio,
     usdkrw,
     jpykrw,
     us,
@@ -223,22 +222,22 @@ function createExtendedSummary(
 
   const ingredients = {
     usd: {
-      cash: financeData.balances.usd.totalAmount * usd,
-      riskless: financeData.bonds.us.totalPurchasePrice * usd,
+      cash: portfolio.balances.usd.totalAmount * usd,
+      riskless: portfolio.bonds.us.totalPurchasePrice * usd,
       stocks: us.gain.marketValue * usd,
     },
     krw: {
-      cash: financeData.balances.krw.totalAmount,
+      cash: portfolio.balances.krw.totalAmount,
       riskless:
-        financeData.deposits.kr.totalAmount +
-        financeData.bonds.kr.totalPurchasePrice,
+        portfolio.deposits.kr.totalAmount +
+        portfolio.bonds.kr.totalPurchasePrice,
       stocks: kr.gain.marketValue,
     },
     jpy: {
-      cash: financeData.balances.jpy.totalAmount * jpy,
+      cash: portfolio.balances.jpy.totalAmount * jpy,
       stocks: jp.gain.marketValue * jpy,
     },
-    housing: financeData.housing.totalAmount,
+    housing: portfolio.housing.totalAmount,
     crypto: {
       stable: stableCoinMarketValue * usd,
       coins: (crypto.gain.marketValue - stableCoinMarketValue) * usd,
@@ -269,7 +268,7 @@ function createExtendedSummary(
   };
 
   const simulate = createSimulation(
-    financeData,
+    portfolio,
     summary.principal,
     us,
     kr,
@@ -285,7 +284,7 @@ function createExtendedSummary(
     ingredients,
     simulates:
       simulate &&
-      financeData.simulations.map((s) =>
+      portfolio.simulations.map((s) =>
         simulate(s.title, s.usdkrw, s.jpykrw, s.spy),
       ),
   };

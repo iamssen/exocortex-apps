@@ -34,7 +34,7 @@ export function FinanceSummarySection(): ReactNode {
   );
 
   const {
-    financeData,
+    portfolio,
     usdkrw,
     jpykrw,
     quotes,
@@ -105,11 +105,11 @@ export function FinanceSummarySection(): ReactNode {
 
       <Separator />
 
-      {financeData && (
+      {portfolio && (
         <KRW
           aria-label="KRW assets"
           data-section="krw"
-          financeData={financeData}
+          portfolio={portfolio}
           view={krwView}
           onDoubleClick={() =>
             setKrwView((prev) => (prev === 'simple' ? 'detail' : 'simple'))
@@ -117,10 +117,10 @@ export function FinanceSummarySection(): ReactNode {
         />
       )}
 
-      {financeData && (
+      {portfolio && (
         <USD
           aria-label="USD assets"
-          financeData={financeData}
+          portfolio={portfolio}
           view={usdView}
           data-section="usd"
           onDoubleClick={() =>
