@@ -34,13 +34,7 @@ export function WeightAndWaistSection({
   const {
     data: { chartData },
   } = useSuspenseQuery(
-    api(
-      'body',
-      {},
-      {
-        select: (d) => selectData(d, dataKey),
-      },
-    ),
+    api('body', {}, { select: (d) => selectData(d, dataKey) }),
   );
 
   if (chartData.length === 0) {

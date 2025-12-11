@@ -25,6 +25,7 @@ function selectData({ data }: VersionData<Body>, dataKey: 'weeks' | 'months') {
     'dayEnergies',
     'dayExercises',
   )?.findLast((o) => !!o)?.date;
+
   const chartData = weeksOrMonths.filter(
     ({ avgDayEnergy, avgDayKcal }) =>
       typeof avgDayEnergy === 'number' || typeof avgDayKcal === 'number',
@@ -43,14 +44,12 @@ export function EnergiesAndExercisesSection({
   const {
     data: { chartData, lastDate },
   } = useSuspenseQuery(
-    api(
-      'body',
-      {},
-      {
-        select: (d) => selectData(d, dataKey),
-      },
-    ),
+    api('body', {}, { select: (d) => selectData(d, dataKey) }),
   );
+
+  if (chartData.length === 0) {
+    return null;
+  }
 
   return (
     <figure aria-label="Calories burned and exercise duration">

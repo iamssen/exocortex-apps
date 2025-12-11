@@ -1,4 +1,3 @@
-import type { Body, VersionData } from '@iamssen/exocortex';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { SkinChart } from '@ui/charts';
 import type { DateItem } from '@ui/components';
@@ -9,26 +8,10 @@ export interface SkinSectionProps {
   chartStartDate: DateItem;
 }
 
-function selectData({ data }: VersionData<Body>) {
-  return {
-    daySkins: data.daySkins,
-  };
-}
-
 export function SkinSection({ chartStartDate }: SkinSectionProps): ReactNode {
-  const {
-    data: { daySkins },
-  } = useSuspenseQuery(
-    api(
-      'body',
-      {},
-      {
-        select: selectData,
-      },
-    ),
-  );
+  const { data } = useSuspenseQuery(api('body', {}));
 
-  if (!daySkins || daySkins.length === 0) {
+  if (data.daySkins.length === 0) {
     return null;
   }
 
@@ -37,10 +20,10 @@ export function SkinSection({ chartStartDate }: SkinSectionProps): ReactNode {
       <figcaption>
         Skin
         <sub aria-label="The date of the last collected data">
-          {daySkins.at(-1)?.date}
+          {data.daySkins.at(-1)?.date}
         </sub>
       </figcaption>
-      <SkinChart data={daySkins} start={chartStartDate.value} />
+      <SkinChart data={data.daySkins} start={chartStartDate.value} />
     </figure>
   );
 }

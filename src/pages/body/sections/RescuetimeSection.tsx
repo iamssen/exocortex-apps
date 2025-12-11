@@ -1,6 +1,7 @@
 import type {
   AggregatedRescuetimeHistory,
   ASC,
+  ExpiryData,
   Rescuetime,
   RescuetimeHistory,
 } from '@iamssen/exocortex';
@@ -17,19 +18,19 @@ export interface RescuetimeSectionProps {
 }
 
 function selectData(
-  { data }: { data: Rescuetime },
+  { data }: ExpiryData<Rescuetime>,
   dataKey: 'weeks' | 'months',
 ) {
-  const history = data[
+  const chartData = data[
     dataKey === 'weeks' ? 'weekly' : 'monthly'
   ] as ASC<AggregatedRescuetimeHistory>;
 
-  const lastRecord = history
+  const lastRecord = chartData
     .at(-1)
     ?.children.findLast((item): item is RescuetimeHistory => !!item);
 
   return {
-    history,
+    chartData,
     lastRecord,
   };
 }
@@ -39,18 +40,12 @@ export function RescuetimeSection({
   chartStartDate,
 }: RescuetimeSectionProps): ReactNode {
   const {
-    data: { history, lastRecord },
+    data: { chartData, lastRecord },
   } = useSuspenseQuery(
-    api(
-      'rescuetime',
-      {},
-      {
-        select: (d) => selectData(d, dataKey),
-      },
-    ),
+    api('rescuetime', {}, { select: (d) => selectData(d, dataKey) }),
   );
 
-  if (!history || history.length === 0) {
+  if (chartData.length === 0) {
     return null;
   }
 
@@ -63,7 +58,7 @@ export function RescuetimeSection({
         </sub>
       </figcaption>
       <RescuetimeSummaryChart
-        data={history}
+        data={chartData}
         queries={rescuetimeSummaryQuery}
         start={chartStartDate.value}
       />

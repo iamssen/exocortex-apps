@@ -33,14 +33,12 @@ export function KcalSection({
   const {
     data: { chartData },
   } = useSuspenseQuery(
-    api(
-      'body',
-      {},
-      {
-        select: (d) => selectData(d, dataKey),
-      },
-    ),
+    api('body', {}, { select: (d) => selectData(d, dataKey) }),
   );
+
+  if (chartData.length === 0) {
+    return null;
+  }
 
   return (
     <figure aria-label="Calorie intake history">
