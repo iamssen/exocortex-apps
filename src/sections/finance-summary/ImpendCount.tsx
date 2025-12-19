@@ -1,6 +1,7 @@
 import type { Iso8601 } from '@iamssen/exocortex';
 import { DateTime } from 'luxon';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 
 export interface ImpendCountProps {
   date: Iso8601;

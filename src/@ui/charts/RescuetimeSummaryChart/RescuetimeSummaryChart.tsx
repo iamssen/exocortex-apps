@@ -7,7 +7,8 @@ import {
   StackedHistoryBar,
 } from '@ui/cartesian-chart';
 import { api } from '@ui/query';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import styles from '../styles.module.css';
 import type { RescuetimeSummaryChartParams } from './data.ts';
 import { createRescuetimeSummaryChart } from './data.ts';

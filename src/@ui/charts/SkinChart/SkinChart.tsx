@@ -7,8 +7,8 @@ import {
   HistoryLine,
   HorizontalLine,
   StackedHistoryArea,
-  type CartesianChartProps,
 } from '@ui/cartesian-chart';
+import type { CartesianChartProps } from '@ui/cartesian-chart';
 import { api } from '@ui/query';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';

@@ -1,5 +1,6 @@
 import type { QuoteInfo } from '@iamssen/exocortex';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 
 import { OutLink } from './OutLink.tsx';
 

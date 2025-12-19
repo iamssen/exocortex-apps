@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@ui/query';
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Route, Routes } from 'react-router';
 import { JournalNewPage } from './JournalNewPage.tsx';
 import { JournalReadPage } from './JournalReadPage.tsx';

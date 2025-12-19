@@ -3,7 +3,8 @@ import { useLocalStorageJson } from '@iamssen/exocortex-appkit/use-local-storage
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@ui/query';
 import { DateTime } from 'luxon';
-import { useEffect, useMemo, type ReactNode } from 'react';
+import { useEffect, useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 interface Coordinates {

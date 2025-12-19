@@ -5,7 +5,8 @@ import { FilterTextForm } from '@ui/components';
 import { filterMoneybookHistory, useScreen } from '@ui/data-utils';
 import { MoneybookHistoryGrid } from '@ui/grids';
 import { api } from '@ui/query';
-import { type ReactNode, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
 import { Page } from '../../Page.tsx';
 import styles from './MoneybookExpenses.module.css';
 

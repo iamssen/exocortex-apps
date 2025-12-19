@@ -3,7 +3,8 @@ import { Format } from '@iamssen/exocortex-appkit/format';
 import { joinQuoteStatisticsAndQuote } from '@iamssen/exocortex/projector';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@ui/query';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import styles from '../QuotePage.module.css';
 

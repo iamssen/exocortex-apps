@@ -14,7 +14,8 @@ import {
   SUPER_EXCESS_CALORIES,
 } from '@ui/env';
 import { api } from '@ui/query';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import styles from '../styles.module.css';
 import type { KcalChartParams } from './data.ts';
 import { createKcalChartData } from './data.ts';

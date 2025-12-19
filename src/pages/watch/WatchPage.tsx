@@ -14,7 +14,8 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { useQuoteInfo, useQuotes, useQuoteStatistics } from '@ui/data-utils';
 import { api } from '@ui/query';
-import { Fragment, type ReactNode, useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { Page } from '../../Page.tsx';
 import styles from './WatchPage.module.css';

@@ -12,7 +12,8 @@ import {
 import { useSummary } from '@ui/data-utils';
 import { api } from '@ui/query';
 import { DateTime } from 'luxon';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { moneybookChartStartDurations } from '../../env.ts';
 import { Page } from '../../Page.tsx';

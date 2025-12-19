@@ -8,7 +8,8 @@ import {
 } from '@ui/components';
 import { api } from '@ui/query';
 import { DateTime } from 'luxon';
-import { Suspense, useMemo, type ReactNode } from 'react';
+import { Suspense, useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { bodyChartStartDurations } from '../../env.ts';
 import { Page } from '../../Page.tsx';
 import styles from './BodySummaryPage.module.css';

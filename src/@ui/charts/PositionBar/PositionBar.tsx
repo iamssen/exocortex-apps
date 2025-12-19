@@ -1,6 +1,7 @@
 import type { CartesianChartProps } from '@ui/cartesian-chart';
 import { CartesianChart, HorizontalBarMarkers } from '@ui/cartesian-chart';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { Bar } from './Bar.tsx';
 import type { PositionBarParams } from './data.tsx';
 import { createPositionBarData } from './data.tsx';

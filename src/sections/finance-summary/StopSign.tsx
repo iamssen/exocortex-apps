@@ -5,7 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '@ui/query';
 import { clsx } from 'clsx/lite';
 import type { ReactNode } from 'react';
-import { type DetailedHTMLProps, type HTMLAttributes, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 import styles from './StopSign.module.css';
 
 type Rating = 'over shooting' | 'under shooting' | 'neutral';

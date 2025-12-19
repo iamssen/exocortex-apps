@@ -1,5 +1,6 @@
 import js from '@eslint/js';
 import prettier from 'eslint-config-prettier';
+import importPlugin from 'eslint-plugin-import';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import unicorn from 'eslint-plugin-unicorn';
@@ -22,6 +23,7 @@ export default [
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'import': importPlugin,
       unicorn,
     },
     rules: {
@@ -64,7 +66,14 @@ export default [
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-shadow': ['warn'],
-      '@typescript-eslint/consistent-type-imports': 'error',
+      'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'separate-type-imports',
+        },
+      ],
 
       'no-restricted-imports': [
         'error',

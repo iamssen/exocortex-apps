@@ -5,7 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 import type { OtherCurrencyBalances } from '@ui/data-utils';
 import { useJoinedQuoteHistory } from '@ui/data-utils';
 import { upbit } from '@ui/query';
-import { Fragment, type ReactNode, useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
+import type { ReactNode } from 'react';
 
 export interface FXProps {
   usd: JoinedFX<USD>;

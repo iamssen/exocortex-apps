@@ -1,6 +1,7 @@
 import type { QuoteHistory, QuoteInfo } from '@iamssen/exocortex';
 import { createQuoteYearlyTrendChartData, YearlyTrendChart } from '@ui/charts';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 
 export interface QuoteYearlyTrendSectionProps {
   info: QuoteInfo;

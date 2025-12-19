@@ -1,13 +1,10 @@
 import { clsx } from 'clsx/lite';
-import {
-  type DataHTMLAttributes,
-  type DetailedHTMLProps,
-  type FormEvent,
-  type ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type {
+  DataHTMLAttributes,
+  DetailedHTMLProps,
+  FormEvent,
+  ReactNode,
 } from 'react';
 import { MdFilterAlt, MdFilterAltOff, MdOutlineClear } from 'react-icons/md';
 import component from './FilterTextForm.module.css';

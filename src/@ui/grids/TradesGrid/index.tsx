@@ -1,6 +1,7 @@
 import type { JoinedTrade, PortfolioMarket } from '@iamssen/exocortex';
 import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import type { Column, DataGridProps } from 'react-data-grid';
 import { DataGrid } from 'react-data-grid';
 import styles from '../styles.module.css';

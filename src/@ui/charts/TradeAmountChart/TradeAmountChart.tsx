@@ -1,6 +1,7 @@
 import type { CartesianChartProps } from '@ui/cartesian-chart';
 import { CartesianChart, DateLines, HistoryLine } from '@ui/cartesian-chart';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import styles from '../styles.module.css';
 import { Bar } from './Bar.tsx';
 import type { TradeAmountChartParams } from './data.ts';

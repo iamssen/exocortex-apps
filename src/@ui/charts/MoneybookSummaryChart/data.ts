@@ -1,5 +1,5 @@
 import type { PortfolioSummaries, PortfolioSummary } from '@iamssen/exocortex';
-import { type Iso8601 } from '@iamssen/exocortex';
+import type { Iso8601 } from '@iamssen/exocortex';
 import type {
   CartesianChartAxis,
   StackedHistoryAreaData,

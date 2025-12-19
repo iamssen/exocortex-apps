@@ -18,7 +18,8 @@ import type {
 } from '@ui/grids';
 import { HoldingsGrid } from '@ui/grids';
 import { api } from '@ui/query';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { MdDashboard, MdDeleteForever } from 'react-icons/md';
 import styles from './HoldingsPage.module.css';
 

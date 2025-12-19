@@ -3,7 +3,7 @@ import type {
   ASC,
   RescuetimeHistoryTimes,
 } from '@iamssen/exocortex';
-import { type Iso8601 } from '@iamssen/exocortex';
+import type { Iso8601 } from '@iamssen/exocortex';
 import { findStartIndex } from '@iamssen/exocortex/date-utils';
 import type {
   CartesianChartAxis,

@@ -14,7 +14,8 @@ import { TradeAmountChart } from '@ui/charts';
 import { useQuotes } from '@ui/data-utils';
 import { TradesGrid } from '@ui/grids';
 import { api } from '@ui/query';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { Page } from '../../Page.tsx';
 import styles from './TradeHistoryPage.module.css';
 

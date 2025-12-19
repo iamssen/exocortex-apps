@@ -4,7 +4,8 @@ import type { PriceLineData } from '@ui/cartesian-chart';
 import { PeChart } from '@ui/charts';
 import { api } from '@ui/query';
 import { DateTime } from 'luxon';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 
 export interface EquityValueHistorySectionProps {
   symbol: string;

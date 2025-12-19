@@ -8,7 +8,8 @@ import {
   useSingleDateState,
 } from '@ui/components';
 import { api } from '@ui/query';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { benchmarkStartDates, quoteStartDates } from '../../env.ts';
 import { Page } from '../../Page.tsx';
 import { dDays } from './d-days.ts';

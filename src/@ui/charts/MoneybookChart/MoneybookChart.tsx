@@ -11,7 +11,8 @@ import {
 } from '@ui/cartesian-chart';
 import { api } from '@ui/query';
 import { DateTime } from 'luxon';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 import styles from '../styles.module.css';
 import type { MoneybookChartParams } from './data.ts';
 import { createMoneybookChart } from './data.ts';
