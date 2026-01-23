@@ -1,5 +1,9 @@
 import type { MoneybookHistory } from '@iamssen/exocortex';
-import { Format } from '@iamssen/exocortex-appkit/format';
+import {
+  column,
+  iso8601Column,
+  numberColumn,
+} from '@iamssen/exocortex-appkit/react-data-grid';
 import type { Column } from 'react-data-grid';
 import { Link } from 'react-router';
 
@@ -16,71 +20,70 @@ export interface Columns {
 }
 
 export function createColumns({ currentEvent }: ColumnOptions): Columns {
-  const date: Column<MoneybookHistory> = {
+  const date = iso8601Column<MoneybookHistory>({
     key: 'date',
     name: 'Date',
     frozen: true,
     minWidth: 100,
     maxWidth: 100,
-    renderCell: ({ row }) => <time dateTime={row.date}>{row.date}</time>,
-  };
+    select: 'date',
+  });
 
-  const category: Column<MoneybookHistory> = {
+  const category = column<MoneybookHistory>({
     key: 'category',
     name: 'Category',
     minWidth: 100,
     maxWidth: 140,
-    renderCell: ({ row }) => {
-      return <span>{row.category}</span>;
-    },
-  };
+    select: 'category',
+  });
 
-  const description: Column<MoneybookHistory> = {
+  const description = column<MoneybookHistory>({
     key: 'description',
     name: 'Description',
     minWidth: 120,
     maxWidth: 240,
-    renderCell: ({ row }) => {
-      return <span>{row.description}</span>;
-    },
-  };
+    select: 'description',
+  });
 
-  const amount: Column<MoneybookHistory> = {
+  const amount = numberColumn<MoneybookHistory>({
     key: 'amount',
     name: 'Amount',
     minWidth: 100,
     maxWidth: 120,
-    renderCell: ({ row }) => {
-      return <Format format="KRW" n={row.amount} />;
-    },
-  };
+    format: 'KRW',
+    select: 'amount',
+  });
 
-  const event: Column<MoneybookHistory> = {
+  const event = column<MoneybookHistory>({
     key: 'event',
     name: 'Event',
-    renderCell: ({ row }) => {
+    select: (row) => {
       if (currentEvent) {
         if (
           row.event &&
           row.event.indexOf(currentEvent) === 0 &&
           row.event.length > currentEvent.length
         ) {
+          const childPath = row.event.slice(currentEvent.length + 1);
+
           return (
             <>
               <span style={{ opacity: 0.3 }}>...</span>
-              <Link to={`./${row.event}`}>
-                /{row.event.slice(currentEvent.length + 1)}
-              </Link>
+              <Link to={`./${childPath}`}>/{childPath}</Link>
             </>
           );
         }
 
-        return <span />;
+        return null;
       }
 
-      return <span>{row.event}</span>;
+      if (row.event) {
+        return <Link to={`/moneybook/event/${row.event}`}>{row.event}</Link>;
+      }
+
+      return row.event;
     },
-  };
+  });
 
   return {
     date,

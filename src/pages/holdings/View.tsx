@@ -18,9 +18,9 @@ import type {
 } from '@ui/grids';
 import { HoldingsGrid } from '@ui/grids';
 import { api } from '@ui/query';
-import { useMemo } from 'react';
 import type { ReactNode } from 'react';
-import { MdDashboard, MdDeleteForever } from 'react-icons/md';
+import { useMemo } from 'react';
+import { MdDeleteForever } from 'react-icons/md';
 import styles from './HoldingsPage.module.css';
 
 export interface ViewProps {
@@ -36,17 +36,14 @@ export function View({
   krwExchangeRate,
   printDisplayName,
 }: ViewProps): ReactNode {
-  const [perspective, setPerspective] =
-    useLocalStorage<HoldingsGridPerspectives>(
-      'holdings_perspective',
-      () => 'daysGain',
-    );
+  const [perspective, setPerspective] = useLocalStorage<
+    keyof HoldingsGridPerspectives
+  >('holdings_perspective', () => 'daysGain');
 
   const [config, setConfig] = useLocalStorageJson<HoldingsGridViewConfig>(
     'holdings_config',
     () => ({
       includeNonHoldings: false,
-      expandDetails: false,
     }),
   );
 
@@ -285,7 +282,7 @@ export function View({
               </button>
             </>
           )}
-          {(market === 'us' || market === 'jp') && (
+          {market === 'us' && (
             <button
               role="tab"
               aria-selected={perspective === 'beta'}
@@ -309,7 +306,7 @@ export function View({
             >
               <MdDeleteForever />
             </button>
-            <button
+            {/* <button
               role="tab"
               aria-selected={config.expandDetails}
               onClick={() =>
@@ -320,7 +317,7 @@ export function View({
               }
             >
               <MdDashboard />
-            </button>
+            </button> */}
           </div>
         </header>
       )}

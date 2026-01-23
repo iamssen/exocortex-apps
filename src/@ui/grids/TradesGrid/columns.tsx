@@ -1,12 +1,15 @@
 import type { JoinedTrade, PortfolioMarket } from '@iamssen/exocortex';
 import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
-import { Format } from '@iamssen/exocortex-appkit/format';
+import {
+  column,
+  numberColumn,
+} from '@iamssen/exocortex-appkit/react-data-grid';
 import type { Column } from 'react-data-grid';
-import { Link } from 'react-router';
-import styles from '../styles.module.css';
+import { quoteSymbolColumn } from '../columns/quoteSymbolColumn.tsx';
+import cellStyles from './cellStyles.module.css';
 
 interface ColumnOptions {
-  portfolio: PortfolioMarket;
+  market: PortfolioMarket;
   currency: CurrencyType;
   printDisplayName?: boolean;
 }
@@ -23,16 +26,16 @@ export interface Columns {
 }
 
 export function createColumns({
-  portfolio,
+  market,
   currency,
   printDisplayName = false,
 }: ColumnOptions): Columns {
-  const date: Column<JoinedTrade> = {
+  const date = column<JoinedTrade>({
     key: 'date',
     name: 'Date',
     frozen: true,
     minWidth: 100,
-    renderCell: ({ row: { isFirstAppearedDate, trade } }) => (
+    select: ({ isFirstAppearedDate, trade }) => (
       <time
         dateTime={trade.date}
         style={{ opacity: !isFirstAppearedDate ? 0.2 : undefined }}
@@ -40,116 +43,70 @@ export function createColumns({
         {trade.date}
       </time>
     ),
-  };
+  });
 
-  const symbol: Column<JoinedTrade> = {
+  const symbol = quoteSymbolColumn<JoinedTrade>({
     key: 'symbol',
     name: 'Symbol',
     frozen: true,
-    minWidth: portfolio === 'kr' ? 130 : 90,
-    maxWidth: portfolio === 'kr' ? 190 : 120,
-    renderCell: ({ row: { trade, quote } }) => (
-      <Link
-        to={`/quote/${trade.symbol}`}
-        style={{
-          fontSize: portfolio === 'kr' ? '0.8em' : undefined,
-          letterSpacing: portfolio === 'kr' ? '-0.1em' : undefined,
-        }}
-      >
-        {printDisplayName ? (quote?.displayName ?? trade.symbol) : trade.symbol}
-      </Link>
-    ),
-  };
+    minWidth: market === 'kr' ? 130 : 90,
+    maxWidth: market === 'kr' ? 190 : 120,
+    printDisplayName,
+    selectSymbol: ({ trade }) => trade.symbol,
+    selectDisplayName: ({ quote }) => quote?.displayName,
+    cellClass: market === 'kr' ? cellStyles.symbolKR : undefined,
+  });
 
-  const price: Column<JoinedTrade> = {
+  const price = numberColumn<JoinedTrade>({
     key: 'price',
     name: 'Price',
     minWidth: 100,
-    renderCell: ({ row: { trade } }) => (
-      <div className={styles.gridCellRightAlign}>
-        <Format format={currency} n={trade.price} />
-      </div>
-    ),
-  };
+    format: currency,
+    select: ({ trade }) => trade.price,
+  });
 
-  const quantity: Column<JoinedTrade> = {
+  const quantity = numberColumn<JoinedTrade>({
     key: 'quantity',
     name: 'Quantity',
     minWidth: 70,
-    renderCell: ({ row: { trade } }) => (
-      <div className={styles.gridCellRightAlign}>
-        <Format n={trade.quantity} />
-      </div>
-    ),
-  };
+    select: ({ trade }) => trade.quantity,
+  });
 
-  const totalAmount: Column<JoinedTrade> = {
+  const totalAmount = numberColumn<JoinedTrade>({
     key: 'totalAmount',
     name: 'Total Amount',
     minWidth: 120,
-    renderCell: ({ row: { trade } }) => (
-      <div className={styles.gridCellRightAlign}>
-        <Format format={currency} n={trade.price * trade.quantity} />
-      </div>
-    ),
-  };
+    format: currency,
+    select: ({ trade }) => trade.price * trade.quantity,
+  });
 
-  const currentPrice: Column<JoinedTrade> = {
+  const currentPrice = numberColumn<JoinedTrade>({
     key: 'currentPrice',
     name: 'Current Price',
     minWidth: 140,
-    renderCell: ({ row: { trade, quote } }) => {
-      if (!quote) {
-        return null;
-      }
+    format: currency,
+    select: ({ quote }) => quote?.price,
+    referenceFormat: 'PERCENT',
+    selectReference: ({ trade, quote }) =>
+      quote && trade.price > 0
+        ? ((quote.price - trade.price) / trade.price) * 100
+        : undefined,
+  });
 
-      return (
-        <div className={styles.gridCellSpaceBetween}>
-          {trade.price > 0 ? (
-            <sub>
-              (
-              <Format
-                format="PERCENT"
-                n={((quote.price - trade.price) / trade.price) * 100}
-              />
-              )
-            </sub>
-          ) : (
-            <sub />
-          )}
-          <Format format={currency} n={quote.price} />
-        </div>
-      );
-    },
-  };
-
-  const gain: Column<JoinedTrade> = {
+  const gain = numberColumn<JoinedTrade>({
     key: 'gain',
     name: 'Gain',
     minWidth: 120,
-    renderCell: ({ row: { trade, quote } }) => {
-      if (!quote) {
-        return null;
-      }
+    format: currency,
+    select: ({ trade, quote }) =>
+      quote ? (quote.price - trade.price) * trade.quantity : undefined,
+  });
 
-      return (
-        <div className={styles.gridCellRightAlign}>
-          <Format
-            format={currency}
-            n={(quote.price - trade.price) * trade.quantity}
-          />
-        </div>
-      );
-    },
-  };
-
-  const comment: Column<JoinedTrade> = {
+  const comment = column<JoinedTrade>({
     key: 'comment',
     name: 'Comment',
-    renderCell: ({ row: { trade } }) => {
-      return <div>{trade.comment}</div>;
-    },
-  };
+    select: ({ trade }) => trade.comment,
+  });
 
   return {
     date,

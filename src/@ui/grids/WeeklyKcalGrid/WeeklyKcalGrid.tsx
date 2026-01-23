@@ -1,11 +1,11 @@
 import type { DESC, WeeklyBody } from '@iamssen/exocortex';
-import { useMemo } from 'react';
+import { OPTIMAL_CALORIES } from '@ui/env';
 import type { ReactNode } from 'react';
+import { useMemo } from 'react';
 import type { DataGridProps } from 'react-data-grid';
 import { DataGrid } from 'react-data-grid';
 import styles from '../styles.module.css';
 import { createColumns } from './columns.tsx';
-import { rowClass } from './rowClass.ts';
 
 export interface WeeklyKcalGridProps extends Omit<
   DataGridProps<WeeklyBody>,
@@ -31,11 +31,17 @@ export function WeeklyKcalGrid({
   return (
     <DataGrid
       {...props}
-      className={`${styles.gridStyle} ${className}`}
+      className={`${styles.grid} ${className}`}
       columns={printColumns}
       rowClass={rowClass}
       rowHeight={55}
       headerRowHeight={25}
     />
   );
+}
+
+function rowClass({ avgDayKcal }: WeeklyBody): string | null {
+  return avgDayKcal && avgDayKcal < OPTIMAL_CALORIES
+    ? styles.gridRowUnimportant
+    : null;
 }

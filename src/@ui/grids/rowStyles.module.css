@@ -1,0 +1,45 @@
+.gridRowNegative {
+  background-color: #212159;
+
+  &:hover {
+    background-color: #12123a;
+  }
+}
+
+.gridRowNegativeGain {
+  color: #c0c0ff;
+
+  a[href] {
+    color: currentColor;
+  }
+}
+
+.gridRowSuperNegativeGain {
+  color: #6f6fef;
+
+  font-weight: bold;
+
+  a[href] {
+    color: currentColor;
+  }
+}
+
+.gridRowPositive {
+  background-color: #15360b;
+
+  &:hover {
+    background-color: #0d2805;
+  }
+}
+
+.gridRowUnimportant {
+  [role='gridcell'] > * {
+    opacity: 0.5;
+  }
+}
+
+.gridRowImportant {
+  [role='gridcell'] > * {
+    font-weight: bold;
+  }
+}

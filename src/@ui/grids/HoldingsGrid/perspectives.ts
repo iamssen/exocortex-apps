@@ -1,7 +1,7 @@
 import type { JoinedHolding } from '@iamssen/exocortex';
 import { clsx } from 'clsx/lite';
 import type { Column } from 'react-data-grid';
-import styles from '../styles.module.css';
+import rowStyles from '../rowStyles.module.css';
 import type { Columns } from './columns.tsx';
 
 export interface Perspective {
@@ -69,9 +69,15 @@ export function createPerspectives({
         return (a.quote?.changePercent ?? 0) - (b.quote?.changePercent ?? 0);
       },
       rowClass: ({ holding, quote }) => {
+        console.log(
+          clsx(
+            holding.shares === 0 && rowStyles.gridRowUnimportant,
+            (quote?.change ?? 0) < 0 && rowStyles.gridRowNegative,
+          ),
+        );
         return clsx(
-          holding.shares === 0 && styles.gridRowUnimportant,
-          (quote?.change ?? 0) < 0 && styles.gridRowNegative,
+          holding.shares === 0 && rowStyles.gridRowUnimportant,
+          (quote?.change ?? 0) < 0 && rowStyles.gridRowNegative,
         );
       },
     },
@@ -101,8 +107,8 @@ export function createPerspectives({
       },
       rowClass: ({ holding, gain }) => {
         return clsx(
-          holding.shares === 0 && styles.gridRowUnimportant,
-          (gain?.totalGain ?? 0) < 0 && styles.gridRowNegative,
+          holding.shares === 0 && rowStyles.gridRowUnimportant,
+          (gain?.totalGain ?? 0) < 0 && rowStyles.gridRowNegative,
         );
       },
     },
@@ -134,8 +140,8 @@ export function createPerspectives({
       },
       rowClass: ({ holding, gain }) => {
         return clsx(
-          holding.shares === 0 && styles.gridRowUnimportant,
-          (gain?.sharesGainPercent ?? 0) < 0 && styles.gridRowNegative,
+          holding.shares === 0 && rowStyles.gridRowUnimportant,
+          (gain?.sharesGainPercent ?? 0) < 0 && rowStyles.gridRowNegative,
         );
       },
     },
@@ -165,8 +171,8 @@ export function createPerspectives({
       },
       rowClass: ({ holding }) => {
         return clsx(
-          holding.shares === 0 && styles.gridRowUnimportant,
-          holding.realizedGain < 0 && styles.gridRowNegative,
+          holding.shares === 0 && rowStyles.gridRowUnimportant,
+          holding.realizedGain < 0 && rowStyles.gridRowNegative,
         );
       },
     },
@@ -195,7 +201,7 @@ export function createPerspectives({
         return (b.gain?.marketValue ?? 0) - (a.gain?.marketValue ?? 0);
       },
       rowClass: ({ holding }) => {
-        return clsx(holding.shares === 0 && styles.gridRowUnimportant);
+        return clsx(holding.shares === 0 && rowStyles.gridRowUnimportant);
       },
     },
     fiftyTwoWeek: {
@@ -228,7 +234,8 @@ export function createPerspectives({
             : 1000;
       },
       rowClass: ({ holding, statistic }) => {
-        const nonHoldings = holding.shares === 0 && styles.gridRowUnimportant;
+        const nonHoldings =
+          holding.shares === 0 && rowStyles.gridRowUnimportant;
 
         if (!statistic?.fiftyTwoWeekRange || !statistic.price) {
           return clsx(nonHoldings);
@@ -236,16 +243,10 @@ export function createPerspectives({
 
         const position = statistic.fiftyTwoWeekPosition ?? 0;
 
-        console.log(
-          'perspectives.tsx..rowClass()',
-          statistic.symbol,
-          statistic.fiftyTwoWeekPosition,
-        );
-
         return clsx(
           nonHoldings,
-          position < 0.15 && styles.gridRowPositive,
-          position > 0.85 && styles.gridRowNegative,
+          position < 0.15 && rowStyles.gridRowPositive,
+          position > 0.85 && rowStyles.gridRowNegative,
         );
       },
     },
@@ -279,7 +280,8 @@ export function createPerspectives({
             : 1000;
       },
       rowClass: ({ holding, statistic }) => {
-        const nonHoldings = holding.shares === 0 && styles.gridRowUnimportant;
+        const nonHoldings =
+          holding.shares === 0 && rowStyles.gridRowUnimportant;
 
         if (!statistic?.fiftyTwoWeekRange || !statistic.price) {
           return clsx(nonHoldings);
@@ -288,8 +290,8 @@ export function createPerspectives({
 
         return clsx(
           nonHoldings,
-          position < 0.15 && styles.gridRowPositive,
-          position > 0.85 && styles.gridRowNegative,
+          position < 0.15 && rowStyles.gridRowPositive,
+          position > 0.85 && rowStyles.gridRowNegative,
         );
       },
     },
@@ -322,7 +324,8 @@ export function createPerspectives({
             : 1000;
       },
       rowClass: ({ holding, statistic }) => {
-        const nonHoldings = holding.shares === 0 && styles.gridRowUnimportant;
+        const nonHoldings =
+          holding.shares === 0 && rowStyles.gridRowUnimportant;
 
         if (
           statistic?.type !== 'EQUITY' ||
@@ -333,8 +336,8 @@ export function createPerspectives({
 
         return clsx(
           nonHoldings,
-          statistic.trailingPE > 25 && styles.gridRowNegative,
-          statistic.trailingPE < 10 && styles.gridRowPositive,
+          statistic.trailingPE > 25 && rowStyles.gridRowNegative,
+          statistic.trailingPE < 10 && rowStyles.gridRowPositive,
         );
       },
     },
@@ -367,7 +370,8 @@ export function createPerspectives({
             : 1000;
       },
       rowClass: ({ holding, statistic }) => {
-        const nonHoldings = holding.shares === 0 && styles.gridRowUnimportant;
+        const nonHoldings =
+          holding.shares === 0 && rowStyles.gridRowUnimportant;
 
         if (
           statistic?.type !== 'EQUITY' ||
@@ -378,8 +382,8 @@ export function createPerspectives({
 
         return clsx(
           nonHoldings,
-          statistic.priceToBook > 15 && styles.gridRowNegative,
-          statistic.priceToBook < 2 && styles.gridRowPositive,
+          statistic.priceToBook > 15 && rowStyles.gridRowNegative,
+          statistic.priceToBook < 2 && rowStyles.gridRowPositive,
         );
       },
     },
@@ -414,22 +418,22 @@ export function createPerspectives({
       },
       rowClass: ({ statistic }) => {
         if (!statistic?.beta || !statistic?.fiftyTwoWeekPosition) {
-          return styles.gridRowUnimportant;
+          return rowStyles.gridRowUnimportant;
         }
 
         const betaValue = statistic.beta ?? 1;
         const fiftyTwoWeekPosition = statistic.fiftyTwoWeekPosition ?? 0;
 
         if (betaValue > 1.1 && fiftyTwoWeekPosition < 0.5) {
-          return styles.gridRowPositive;
+          return rowStyles.gridRowPositive;
         } else if (betaValue < 0.9 && fiftyTwoWeekPosition > 0.5) {
-          return styles.gridRowUnimportant;
+          return rowStyles.gridRowUnimportant;
         } else if (betaValue > 1.1 && fiftyTwoWeekPosition > 0.5) {
-          return styles.gridRowNegative;
+          return rowStyles.gridRowNegative;
         } else if (betaValue > 0.9 && fiftyTwoWeekPosition < 0.5) {
-          return styles.gridRowUnimportant;
+          return rowStyles.gridRowUnimportant;
         }
-        return styles.gridRowUnimportant;
+        return rowStyles.gridRowUnimportant;
       },
     },
   };

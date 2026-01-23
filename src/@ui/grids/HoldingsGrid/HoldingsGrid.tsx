@@ -1,18 +1,17 @@
 import type { JoinedHolding, PortfolioMarket } from '@iamssen/exocortex';
 import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
-import { useEffect, useMemo, useRef } from 'react';
 import type { ReactNode } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { DataGridHandle, DataGridProps } from 'react-data-grid';
 import { DataGrid } from 'react-data-grid';
 import styles from '../styles.module.css';
 import { createColumns } from './columns.tsx';
 import { filterColumns } from './filterColumns.ts';
-import type { Perspectives } from './perspectives.tsx';
-import { createPerspectives } from './perspectives.tsx';
+import type { Perspectives } from './perspectives.ts';
+import { createPerspectives } from './perspectives.ts';
 
 export interface HoldingsGridViewConfig {
   includeNonHoldings: boolean;
-  expandDetails: boolean;
 }
 
 export interface HoldingsGridProps
@@ -25,15 +24,12 @@ export interface HoldingsGridProps
   perspective: keyof Perspectives;
 }
 
-export type HoldingsGridPerspectives = keyof Perspectives;
-
 export function HoldingsGrid({
   currency,
   portfolio,
   printDisplayName,
   perspective,
   includeNonHoldings,
-  expandDetails,
   className,
   rows,
   ...props
@@ -42,12 +38,11 @@ export function HoldingsGrid({
 
   const columns = useMemo(() => {
     return createColumns({
-      portfolio,
+      market: portfolio,
       currency,
       printDisplayName,
-      expandDetails,
     });
-  }, [currency, expandDetails, portfolio, printDisplayName]);
+  }, [currency, portfolio, printDisplayName]);
 
   const perspectives = useMemo(() => {
     return createPerspectives(columns);
@@ -76,7 +71,7 @@ export function HoldingsGrid({
     <DataGrid
       ref={dataGrid}
       {...props}
-      className={`${styles.gridStyle} ${className}`}
+      className={`${styles.grid} ${className}`}
       columns={printColumns}
       rowClass={selectedPerspective.rowClass}
       rows={sortedRows}

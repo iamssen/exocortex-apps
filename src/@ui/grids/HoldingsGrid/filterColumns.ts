@@ -4,7 +4,7 @@ import type { Column } from 'react-data-grid';
 const excludeColumns: Record<PortfolioMarket, Set<string>> = {
   us: new Set(),
   kr: new Set(['roa', 'roe', 'beta']),
-  jp: new Set(),
+  jp: new Set(['roa', 'roe', 'beta']),
   fx: new Set(['per', 'pbr', 'roa', 'roe', 'beta']),
   crypto: new Set(['per', 'pbr', 'roa', 'roe', 'beta']),
 };

@@ -1,17 +1,19 @@
 import type { JoinedHolding, PortfolioMarket } from '@iamssen/exocortex';
 import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
-import { Evaluate, Format } from '@iamssen/exocortex-appkit/format';
-import { MarketStateSymbol } from '@ui/components';
-import type { CSSProperties } from 'react';
+import { numberColumn } from '@iamssen/exocortex-appkit/react-data-grid';
 import type { Column } from 'react-data-grid';
-import { Link } from 'react-router';
-import styles from '../styles.module.css';
+import { marketPriceColumn } from '../columns/marketPriceColumn.tsx';
+import { marketValueColumn } from '../columns/marketValueColumn.tsx';
+import { quote52WeekColumn } from '../columns/quote52WeekColumn.tsx';
+import { quotePeColumn } from '../columns/quotePeColumn.tsx';
+import { quoteSymbolColumn } from '../columns/quoteSymbolColumn.tsx';
+import cellStyles from './cellStyles.module.css';
 
 interface ColumnOptions {
-  portfolio: PortfolioMarket;
+  market: PortfolioMarket;
+  // currency 때문에 어차피 columns 재생성이 필요함
   currency: CurrencyType;
   printDisplayName?: boolean;
-  expandDetails: boolean;
 }
 
 export interface Columns {
@@ -36,376 +38,185 @@ export interface Columns {
 }
 
 export function createColumns({
-  portfolio,
+  market,
   currency,
   printDisplayName = false,
-  expandDetails,
 }: ColumnOptions): Columns {
-  const symbol: Column<JoinedHolding> = {
+  const symbol = quoteSymbolColumn<JoinedHolding>({
     key: 'symbol',
     name: 'Symbol',
     frozen: true,
     width: '20%',
-    minWidth: portfolio === 'kr' ? 130 : 90,
-    maxWidth: portfolio === 'kr' ? 190 : 120,
-    renderCell: ({ row: { holding, quote } }) => (
-      <Link
-        to={`/quote/${holding.symbol}`}
-        style={{
-          fontSize: portfolio === 'kr' ? '0.8em' : undefined,
-          letterSpacing: portfolio === 'kr' ? '-0.1em' : undefined,
-        }}
-      >
-        {printDisplayName
-          ? (quote?.displayName ?? holding.symbol)
-          : holding.symbol}
-      </Link>
-    ),
-  };
+    minWidth: market === 'kr' ? 130 : 90,
+    maxWidth: market === 'kr' ? 190 : 120,
+    printDisplayName,
+    selectSymbol: ({ holding, quote }) => quote?.symbol ?? holding.symbol,
+    selectDisplayName: ({ quote }) => quote?.displayName,
+    cellClass: market === 'kr' ? cellStyles.symbolKR : undefined,
+  });
 
-  const avgCostPerShare: Column<JoinedHolding> = {
+  const avgCostPerShare = numberColumn<JoinedHolding>({
     key: 'avgCost',
     name: 'Avg Cost',
     minWidth: 80,
-    renderCell: ({ row: { holding } }) => (
-      <div className={styles.gridCellRightAlign}>
-        {holding.shares > 0 ? (
-          <Format format={currency} n={holding.avgCostPerShare} />
-        ) : (
-          '-'
-        )}
-      </div>
-    ),
-  };
+    format: currency,
+    select: ({ holding }) => holding.avgCostPerShare,
+  });
 
-  const price: Column<JoinedHolding> = {
+  const price = marketPriceColumn<JoinedHolding>({
     key: 'price',
     name: 'Price',
     minWidth: 90,
-    renderCell: ({ row: { quote } }) => (
-      <div className={styles.gridCellSpaceBetween}>
-        <MarketStateSymbol marketState={quote?.marketState} />
-        <Format format={currency} n={quote?.price} />
-      </div>
-    ),
-  };
+    format: currency,
+    selectMarketState: ({ quote }) => quote?.marketState,
+    selectPrice: ({ quote }) => quote?.price,
+  });
 
-  const change: Column<JoinedHolding> = {
+  const change = numberColumn<JoinedHolding>({
     key: 'change',
     name: 'Change',
     minWidth: 120,
-    renderCell: ({ row: { quote } }) => (
-      <div className={styles.gridCellSpaceBetween}>
-        <sub>
-          (<Format format="PERCENT" n={quote?.changePercent} />)
-        </sub>
-        <Format format={currency} n={quote?.change} />
-      </div>
-    ),
-  };
+    format: currency,
+    select: ({ quote }) =>
+      quote && quote.change !== 0 ? quote.change : undefined,
+    referenceFormat: 'PERCENT',
+    selectReference: ({ quote }) =>
+      quote && quote.change !== 0 ? quote.changePercent : undefined,
+  });
 
-  const daysGain: Column<JoinedHolding> = {
+  const daysGain = numberColumn<JoinedHolding>({
     key: 'daysGain',
     name: `Day's Gain`,
     minWidth: 80,
-    renderCell: ({ row: { gain, holding } }) => (
-      <div className={styles.gridCellRightAlign}>
-        {holding.shares > 0 ? (
-          <Format format={currency} n={gain?.daysGain} />
-        ) : (
-          '-'
-        )}
-      </div>
-    ),
-  };
+    format: currency,
+    select: ({ gain, holding }) =>
+      holding.shares > 0 ? gain?.daysGain : undefined,
+  });
 
-  const sharesGain: Column<JoinedHolding> = {
+  const sharesGain = numberColumn<JoinedHolding>({
     key: 'sharesGain',
     name: 'Shares Gain',
     minWidth: 140,
-    renderCell: ({ row: { gain, holding, quote } }) =>
-      holding.shares > 0 ? (
-        <div className={styles.gridCellSpaceBetween}>
-          <sub>
-            {quote && (
-              <>
-                (
-                <Format
-                  format="PERCENT"
-                  n={
-                    ((quote.price - holding.avgCostPerShare) /
-                      holding.avgCostPerShare) *
-                    100
-                  }
-                />
-                )
-              </>
-            )}
-          </sub>
-          <Format format={currency} n={gain?.sharesGain} />
-        </div>
-      ) : (
-        <div className={styles.gridCellRightAlign}>-</div>
-      ),
-  };
+    format: currency,
+    select: ({ gain, holding }) =>
+      holding.shares > 0 ? gain?.sharesGain : undefined,
+    referenceFormat: 'PERCENT',
+    selectReference: ({ quote, holding }) =>
+      quote && holding.shares > 0
+        ? ((quote.price - holding.avgCostPerShare) / holding.avgCostPerShare) *
+          100
+        : undefined,
+  });
 
-  const realizedGain: Column<JoinedHolding> = {
+  const realizedGain = numberColumn<JoinedHolding>({
     key: 'realizedGain',
     name: 'Realized Gain',
     minWidth: 90,
-    renderCell: ({ row: { holding } }) => (
-      <div className={styles.gridCellRightAlign}>
-        <Format format={currency} n={holding.realizedGain} />
-      </div>
-    ),
-  };
+    format: currency,
+    select: ({ holding }) => holding.realizedGain,
+  });
 
-  const totalGain: Column<JoinedHolding> = {
+  const totalGain = numberColumn<JoinedHolding>({
     key: 'totalGain',
     name: 'Total Gain',
     minWidth: 140,
-    renderCell: ({ row: { gain, holding } }) =>
-      holding.shares > 0 ? (
-        <div className={styles.gridCellSpaceBetween}>
-          <sub>
-            {gain && (
-              <>
-                (<Format format="PERCENT" n={gain.totalGainPercent} />)
-              </>
-            )}
-          </sub>
-          <Format format={currency} n={gain?.totalGain} />
-        </div>
-      ) : (
-        <div className={styles.gridCellRightAlign}>-</div>
-      ),
-  };
+    format: currency,
+    select: ({ gain, holding }) =>
+      holding.shares > 0 ? gain?.totalGain : undefined,
+    referenceFormat: 'PERCENT',
+    selectReference: ({ gain, holding }) =>
+      gain && holding.shares > 0 ? gain.totalGainPercent : undefined,
+  });
 
-  const marketValue: Column<JoinedHolding> = {
+  const marketValue = marketValueColumn<JoinedHolding>({
     key: 'marketValue',
     name: 'Market Value',
     minWidth: 150,
-    renderCell: ({ row: { gain, holding } }) => (
-      <div className={styles.gridCellSpaceBetween}>
-        <sub>
-          (
-          <Evaluate
-            format="PERCENT"
-            expr="marketValue / totalMarketValue * 100"
-            value={{ marketValue: gain.marketValue }}
-          />
-          )
-        </sub>
-        {holding.shares > 0 ? (
-          <Format format={currency} n={gain.marketValue} />
-        ) : (
-          <span>-</span>
-        )}
-      </div>
-    ),
-  };
+    format: currency,
+    selectMarketValue: ({ gain, holding }) =>
+      holding.shares > 0 ? gain.marketValue : undefined,
+  });
 
-  const shares: Column<JoinedHolding> = {
+  const shares = numberColumn<JoinedHolding>({
     key: 'shares',
     name: 'Shares',
     minWidth: 70,
-    renderCell: ({ row: { holding } }) => (
-      <div className={styles.gridCellRightAlign}>
-        {holding.shares > 0 ? <Format n={holding.shares} /> : '-'}
-      </div>
-    ),
-  };
+    select: ({ holding }) => holding.shares,
+  });
 
-  const per: Column<JoinedHolding> = {
+  const per = quotePeColumn<JoinedHolding>({
     key: 'per',
     name: 'P/E',
     minWidth: 100,
-    renderCell: ({ row: { statistic } }) => (
-      <div className={styles.gridCellSpaceBetween}>
-        {statistic?.type === 'EQUITY' && (
-          <>
-            <span>
-              <Format n={statistic.trailingPE} />
-            </span>
-            {statistic.forwardPE && (
-              <>
-                <sub>
-                  → <Format n={statistic.forwardPE} />
-                </sub>
-              </>
-            )}
-          </>
-        )}
-      </div>
-    ),
-  };
+    selectTrailingPe: ({ statistic }) =>
+      statistic?.type === 'EQUITY' ? statistic?.trailingPE : undefined,
+    selectForwardPe: ({ statistic }) =>
+      statistic?.type === 'EQUITY' ? statistic?.forwardPE : undefined,
+  });
 
-  const pbr: Column<JoinedHolding> = {
+  const pbr = numberColumn<JoinedHolding>({
     key: 'pbr',
     name: 'P/B',
     minWidth: 60,
-    renderCell: ({ row: { statistic } }) => (
-      <div className={styles.gridCellRightAlign}>
-        {statistic?.type === 'EQUITY' && <Format n={statistic?.priceToBook} />}
-      </div>
-    ),
-  };
+    select: ({ statistic }) =>
+      statistic?.type === 'EQUITY' ? statistic?.priceToBook : undefined,
+  });
 
-  const fiftyTwoWeek: Column<JoinedHolding> = {
+  const fiftyTwoWeek = quote52WeekColumn<JoinedHolding>({
     key: 'fiftyTwoWeek',
     name: '52 Week',
     minWidth: 130,
-    renderCell: ({ row: { statistic } }) => {
-      if (!statistic?.fiftyTwoWeekRange) {
-        return null;
-      }
+    format: currency,
+    select: ({ statistic }) => statistic,
+    cellClass: cellStyles.fiftyTwoWeeks,
+  });
 
-      let low: CSSProperties | undefined = undefined;
-      let high: CSSProperties | undefined = undefined;
-
-      const position = statistic.fiftyTwoWeekPosition ?? 0;
-      if (position > 0.8) {
-        low = { opacity: 0.3 };
-        high = { fontWeight: 'bold', color: 'var(--negative)' };
-      } else if (position < 0.2) {
-        low = { fontWeight: 'bold', color: 'var(--positive)' };
-        high = { opacity: 0.3 };
-      } else if (position > 0.5) {
-        low = { opacity: 0.5 };
-      } else if (position < 0.5) {
-        high = { opacity: 0.5 };
-      }
-
-      return (
-        <div className={styles.gridCellSpaceBetween}>
-          <Format
-            format={currency}
-            n={statistic.fiftyTwoWeekRange.low}
-            style={low}
-          />
-          {' - '}
-          <Format
-            format={currency}
-            n={statistic.fiftyTwoWeekRange.high}
-            style={high}
-          />
-        </div>
-      );
-    },
-  };
-
-  const buy: Column<JoinedHolding> = {
+  const buy = numberColumn<JoinedHolding>({
     key: 'buy',
-    name: 'Buy',
-    minWidth: expandDetails ? 160 : 80,
-    renderCell: ({ row: { holding, quote } }) => (
-      <div
-        className={styles.gridCellSpaceBetween}
-        style={{
-          color:
-            (quote?.price ?? 0) < holding.prices.lastBuy * 0.85
-              ? 'var(--negative)'
-              : (quote?.price ?? 0) > holding.prices.lastBuy * 1.25
-                ? 'var(--positive)'
-                : undefined,
-        }}
-      >
-        <sub>
-          {expandDetails &&
-            holding.prices.lastBuy !== holding.prices.minBuy && (
-              <>
-                <Format format={currency} n={holding.prices.minBuy} />
-                {holding.prices.minBuy !== holding.prices.maxBuy && (
-                  <>
-                    {' / '}
-                    <Format format={currency} n={holding.prices.maxBuy} />
-                  </>
-                )}
-              </>
-            )}
-        </sub>
-        <Format format={currency} n={holding.prices.lastBuy} />
-      </div>
-    ),
-  };
+    name: 'Last Buy',
+    minWidth: 80,
+    format: currency,
+    select: ({ holding }) => holding.prices.lastBuy,
+  });
 
-  const sell: Column<JoinedHolding> = {
+  const sell = numberColumn<JoinedHolding>({
     key: 'sell',
-    name: 'Sell',
-    minWidth: expandDetails ? 160 : 80,
-    renderCell: ({ row: { holding, quote } }) => {
-      if (!holding.prices.lastSell) {
-        return null;
-      }
+    name: 'Last Sell',
+    minWidth: 80,
+    format: currency,
+    select: ({ holding }) => holding.prices.lastSell,
+  });
 
-      return (
-        <div
-          className={styles.gridCellSpaceBetween}
-          style={{
-            color:
-              (quote?.price ?? 0) > holding.prices.lastSell * 1.25
-                ? 'var(--negative)'
-                : (quote?.price ?? 0) < holding.prices.lastSell * 0.85
-                  ? 'var(--positive)'
-                  : undefined,
-          }}
-        >
-          <sub>
-            {expandDetails &&
-              holding.prices.lastSell !== holding.prices.minSell && (
-                <>
-                  <Format format={currency} n={holding.prices.minSell} />
-                  {holding.prices.minSell !== holding.prices.maxSell && (
-                    <>
-                      {' / '}
-                      <Format format={currency} n={holding.prices.maxSell} />
-                    </>
-                  )}
-                </>
-              )}
-          </sub>
-          <Format format={currency} n={holding.prices.lastSell} />
-        </div>
-      );
-    },
-  };
-
-  const roa: Column<JoinedHolding> = {
+  const roa = numberColumn<JoinedHolding>({
     key: 'roa',
     name: 'ROA',
-    minWidth: 60,
-    renderCell: ({ row: { statistic } }) => (
-      <div className={styles.gridCellRightAlign}>
-        {statistic?.type === 'EQUITY' && statistic?.returnOnAssets && (
-          <Format format="PERCENT" n={statistic.returnOnAssets * 100} />
-        )}
-      </div>
-    ),
-  };
+    minWidth: 80,
+    format: 'PERCENT',
+    select: ({ statistic }) =>
+      statistic?.type === 'EQUITY' &&
+      typeof statistic?.returnOnAssets === 'number'
+        ? statistic.returnOnAssets * 100
+        : undefined,
+  });
 
-  const roe: Column<JoinedHolding> = {
+  const roe = numberColumn<JoinedHolding>({
     key: 'roe',
     name: 'ROE',
-    minWidth: 60,
-    renderCell: ({ row: { statistic } }) => (
-      <div className={styles.gridCellRightAlign}>
-        {statistic?.type === 'EQUITY' && statistic?.returnOnEquity && (
-          <Format format="PERCENT" n={statistic.returnOnEquity * 100} />
-        )}
-      </div>
-    ),
-  };
+    minWidth: 80,
+    format: 'PERCENT',
+    select: ({ statistic }) =>
+      statistic?.type === 'EQUITY' &&
+      typeof statistic?.returnOnEquity === 'number'
+        ? statistic.returnOnEquity * 100
+        : undefined,
+  });
 
-  const beta: Column<JoinedHolding> = {
+  const beta = numberColumn<JoinedHolding>({
     key: 'beta',
     name: 'BETA',
     minWidth: 60,
-    renderCell: ({ row: { statistic } }) => (
-      <div className={styles.gridCellRightAlign}>
-        {statistic?.beta && <Format n={statistic.beta} />}
-      </div>
-    ),
-  };
+    select: ({ statistic }) => statistic?.beta,
+  });
 
   return {
     sharesGain,

@@ -1,0 +1,24 @@
+.symbolKR {
+  font-size: 0.8em;
+  letter-spacing: -0.1em;
+}
+
+.fiftyTwoWeeks {
+  [data-state='muted'] {
+    opacity: 0.3;
+  }
+
+  [data-state='subtle'] {
+    opacity: 0.5;
+  }
+
+  [data-state='negative'] {
+    font-weight: bold;
+    color: var(--negative);
+  }
+
+  [data-state='positive'] {
+    font-weight: bold;
+    color: var(--positive);
+  }
+}

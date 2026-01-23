@@ -1,9 +1,10 @@
 import type { WeeklyBody } from '@iamssen/exocortex';
 import { Format } from '@iamssen/exocortex-appkit/format';
+import { column } from '@iamssen/exocortex-appkit/react-data-grid';
+import { EXCESS_CALORIES, SUPER_EXCESS_CALORIES } from '@ui/env';
 import { DateTime } from 'luxon';
 import type { Column } from 'react-data-grid';
-import { avgDayKcalClass, dayClass } from './cellClass.ts';
-import component from './component.module.css';
+import cellStyles from './cellStyles.module.css';
 
 export interface Columns {
   week: Column<WeeklyBody>;
@@ -16,17 +17,21 @@ export interface Columns {
   sun: Column<WeeklyBody>;
 }
 
-function createDayColumn(
-  name: string,
-  columnIndex: number,
-): Column<WeeklyBody> {
-  return {
+function createDayColumn(name: string, columnIndex: number) {
+  return column<WeeklyBody>({
     key: name.toLowerCase(),
     name,
     minWidth: 85,
-    cellClass: dayClass(columnIndex),
-    renderCell: ({ row }) => {
-      const day = row.dayKcals[columnIndex];
+    cellClass: ({ dayKcals }) => {
+      const kcal = dayKcals[columnIndex]?.totalKcal ?? 0;
+      return kcal > SUPER_EXCESS_CALORIES
+        ? cellStyles.gridCellSuperDanger
+        : kcal > EXCESS_CALORIES
+          ? cellStyles.gridCellDanger
+          : null;
+    },
+    select: ({ dayKcals }) => {
+      const day = dayKcals[columnIndex];
 
       if (!day) {
         return null;
@@ -35,7 +40,7 @@ function createDayColumn(
       const date = DateTime.fromISO(day.date);
 
       return (
-        <div className={component.gridCellDay}>
+        <div className={cellStyles.gridCellDay}>
           <div>
             <time dateTime={day.date}>
               {columnIndex === 0 || date.day === 1
@@ -45,51 +50,55 @@ function createDayColumn(
             {day.drinking && <span>🍺</span>}
           </div>
           <div>
-            <Format format="INTEGER" n={row.dayKcals[columnIndex]?.totalKcal} />
+            <Format format="INTEGER" n={dayKcals[columnIndex]?.totalKcal} />
             Kcal
           </div>
         </div>
       );
     },
-  };
+  });
 }
 
-export function createColumns(): Columns {
-  const week: Column<WeeklyBody> = {
+function createWeekColumn() {
+  return column<WeeklyBody>({
     key: 'week',
     name: 'Week',
     frozen: true,
     minWidth: 75,
-    cellClass: avgDayKcalClass,
-    renderCell: ({ row }) => {
+    cellClass: ({ avgDayKcal }) => {
+      if (!avgDayKcal) {
+        return null;
+      }
+
+      return avgDayKcal > SUPER_EXCESS_CALORIES
+        ? cellStyles.gridCellSuperDanger
+        : avgDayKcal > EXCESS_CALORIES
+          ? cellStyles.gridCellDanger
+          : null;
+    },
+    select: ({ week, avgDayKcal }) => {
       return (
-        <div className={component.gridCellWeek}>
-          <time dateTime={row.week}>{row.week}</time>
+        <div className={cellStyles.gridCellWeek}>
+          <time dateTime={week}>{week}</time>
           <div>
-            <Format format="INTEGER" n={row.avgDayKcal} />
+            <Format format="INTEGER" n={avgDayKcal} />
             Kcal
           </div>
         </div>
       );
     },
-  };
+  });
+}
 
-  const mon: Column<WeeklyBody> = createDayColumn('Mon', 0);
-  const tue: Column<WeeklyBody> = createDayColumn('Tue', 1);
-  const wed: Column<WeeklyBody> = createDayColumn('Wed', 2);
-  const thu: Column<WeeklyBody> = createDayColumn('Thu', 3);
-  const fri: Column<WeeklyBody> = createDayColumn('Fri', 4);
-  const sat: Column<WeeklyBody> = createDayColumn('Sat', 5);
-  const sun: Column<WeeklyBody> = createDayColumn('Sun', 6);
-
+export function createColumns(): Columns {
   return {
-    week,
-    mon,
-    tue,
-    wed,
-    thu,
-    fri,
-    sat,
-    sun,
+    week: createWeekColumn(),
+    mon: createDayColumn('Mon', 0),
+    tue: createDayColumn('Tue', 1),
+    wed: createDayColumn('Wed', 2),
+    thu: createDayColumn('Thu', 3),
+    fri: createDayColumn('Fri', 4),
+    sat: createDayColumn('Sat', 5),
+    sun: createDayColumn('Sun', 6),
   };
 }

@@ -1,52 +1,40 @@
-import type { JoinedTrade, PortfolioMarket } from '@iamssen/exocortex';
-import type { CurrencyType } from '@iamssen/exocortex-appkit/format';
+import type { MoneybookHistory } from '@iamssen/exocortex';
+import type { ReactNode, Ref } from 'react';
 import { useMemo } from 'react';
-import type { ReactNode } from 'react';
-import type { Column, DataGridProps } from 'react-data-grid';
+import type { Column, DataGridHandle, DataGridProps } from 'react-data-grid';
 import { DataGrid } from 'react-data-grid';
 import styles from '../styles.module.css';
 import type { Columns } from './columns.tsx';
 import { createColumns } from './columns.tsx';
 import { rowClass } from './rowClass.ts';
 
-export interface TradesGridProps extends Omit<
-  DataGridProps<JoinedTrade>,
+export interface MoneybookHistoryGridProps extends Omit<
+  DataGridProps<MoneybookHistory>,
   'columns' | 'rowClass' | 'rowHeight'
 > {
-  currency: CurrencyType;
-  portfolio: PortfolioMarket;
-  printDisplayName?: boolean;
+  gridRef?: Ref<DataGridHandle>;
   excludeColumns?: Set<keyof Columns>;
+  currentEvent?: string;
 }
-
-export type TradesGridColumns = Columns;
 
 const columnNames = [
   'date',
-  'symbol',
-  'price',
-  'quantity',
-  'totalAmount',
-  'currentPrice',
-  'gain',
-  'comment',
+  'category',
+  'description',
+  'amount',
+  'event',
 ] as (keyof Columns)[];
 
-export function TradesGrid({
-  currency,
-  portfolio,
-  printDisplayName,
+export function MoneybookHistoryGrid({
+  gridRef,
   className,
   excludeColumns,
+  currentEvent,
   ...props
-}: TradesGridProps): ReactNode {
+}: MoneybookHistoryGridProps): ReactNode {
   const columns = useMemo(() => {
-    return createColumns({
-      portfolio,
-      currency,
-      printDisplayName,
-    });
-  }, [currency, portfolio, printDisplayName]);
+    return createColumns({ currentEvent });
+  }, [currentEvent]);
 
   const printColumns = useMemo(() => {
     const filteredColumnNames = excludeColumns
@@ -55,13 +43,14 @@ export function TradesGrid({
 
     return filteredColumnNames.map(
       (columnName) => columns[columnName],
-    ) as Column<JoinedTrade>[];
+    ) as Column<MoneybookHistory>[];
   }, [columns, excludeColumns]);
 
   return (
     <DataGrid
       {...props}
-      className={`${styles.gridStyle} ${className}`}
+      ref={gridRef}
+      className={`${styles.grid} ${className}`}
       columns={printColumns}
       rowClass={rowClass}
       rowHeight={25}

@@ -1,7 +1,7 @@
 import type { MoneybookHistory } from '@iamssen/exocortex';
 import { clsx } from 'clsx/lite';
 import { minimatch } from 'minimatch';
-import styles from '../styles.module.css';
+import rowStyles from '../rowStyles.module.css';
 
 function categoryMatch(category: string): string | undefined {
   if (
@@ -10,21 +10,21 @@ function categoryMatch(category: string): string | undefined {
     minimatch(category, '공과금/{,/*}') ||
     category === '교통/대중교통'
   ) {
-    return styles.gridRowUnimportant;
+    return rowStyles.gridRowUnimportant;
   } else if (
     category === '운동' ||
     minimatch(category, '여가/{영화,레저,예술,데이트,체험}') ||
     minimatch(category, '지식{,/*}') ||
     minimatch(category, '여행{,/*}')
   ) {
-    return styles.gridRowPositive;
+    return rowStyles.gridRowPositive;
   } else if (
     category === '술' ||
     category === '담배' ||
     minimatch(category, '교통/{택시,범칙금}') ||
     minimatch(category, '여가/{웹소설,웹툰,유흥}')
   ) {
-    return styles.gridRowNegative;
+    return rowStyles.gridRowNegative;
   }
 
   return undefined;
@@ -32,7 +32,7 @@ function categoryMatch(category: string): string | undefined {
 
 function amountMatch(_category: string, amount: number): string | undefined {
   if (amount > 1_000_000) {
-    return styles.gridRowImportant;
+    return rowStyles.gridRowImportant;
   }
 
   return undefined;
