@@ -6,7 +6,7 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": ["run", "dev:finance"],
       "console": "integratedTerminal",
       "serverReadyAction": {
         // watch for Vite.js message pattern
@@ -15,7 +15,7 @@
         "pattern": "Local:.*https://localhost:([0-9]+)",
         "uriFormat": "https://localhost:%s",
         "action": "debugWithChrome",
-        "webRoot": "${workspaceFolder}"
+        "webRoot": "${workspaceFolder}/apps/finance"
       }
     }
   ]

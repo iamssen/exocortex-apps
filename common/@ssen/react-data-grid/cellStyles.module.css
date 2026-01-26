@@ -1,0 +1,19 @@
+.cellSpaceBetween {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+
+  > sub,
+  > svg {
+    opacity: 0.5;
+  }
+}
+
+.cellRightAlign {
+  text-align: right;
+}
+
+.cellCenterAlign {
+  text-align: center;
+}

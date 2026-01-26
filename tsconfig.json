@@ -37,8 +37,9 @@
 
     /* Project */
     "paths": {
-      "@ui/*": ["./src/@ui/*/index.ts"]
+      "@ssen/*": ["./common/@ssen/*/index.ts"],
+      "@ui/*": ["./common/@ui/*/index.ts"]
     }
   },
-  "include": ["src", "vite-env.d.ts"]
+  "include": ["common", "apps", "vite-env.d.ts"]
 }

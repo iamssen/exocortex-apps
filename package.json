@@ -2,11 +2,12 @@
   "private": true,
   "type": "module",
   "author": "SSen",
-  "repository": "https://github.com/iamssen/finance",
+  "repository": "https://github.com/iamssen/exocortex-apps",
   "scripts": {
     "type-check": "tsc --watch --noEmit",
-    "dev": "vite",
-    "build": "vite build",
+    "dev:finance": "vite --config apps/finance/vite.config.mts",
+    "build:finance": "vite build --config apps/finance/vite.config.mts",
+    "build": "npm run build:finance",
     "start": "echo 'Use Run and Debug panel of IDE instead'",
     "test": "vitest run",
     "format": "prettier --write \"**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}\"",
@@ -15,22 +16,21 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "src/**/*.{ts,mts,cts,tsx}": [
+    "{common,apps}/**/*.{ts,mts,cts,tsx}": [
       "prettier --write",
       "eslint --max-warnings 0",
       "vitest related"
     ],
-    "src/**/*.{js,mjs,cjs,jsx}": [
+    "{common,apps}/**/*.{js,mjs,cjs,jsx}": [
       "prettier --write",
       "eslint --max-warnings 0"
     ],
-    "src/**/*.{json,css}": [
+    "{common,apps}/**/*.{json,css}": [
       "prettier --write"
     ]
   },
   "dependencies": {
     "@iamssen/exocortex": "0.0.10",
-    "@iamssen/exocortex-appkit": "0.0.10",
     "@tanstack/react-query": "^5.90.12",
     "@tiptap/core": "^3.11.1",
     "@tiptap/extension-list": "^3.11.1",
