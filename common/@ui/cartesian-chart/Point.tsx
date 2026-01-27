@@ -2,7 +2,10 @@ import { scaleLinear, scaleTime } from 'd3-scale';
 import type { ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 export interface PointProps extends SVGProps<SVGGElement> {
   label?: string;
@@ -11,14 +14,14 @@ export interface PointProps extends SVGProps<SVGGElement> {
   yValue: number;
 }
 
-export function Point({
+export const Point: CartesianChartSvgComponent<PointProps> = ({
   label,
   axis,
   xValue,
   yValue,
   style,
   ...props
-}: PointProps): ReactNode {
+}: PointProps): ReactNode => {
   const { width, height } = useCartesianChart();
 
   const xScale = useMemo(
@@ -58,4 +61,6 @@ export function Point({
       {textElements}
     </g>
   );
-}
+};
+
+Point.isSVG = true;

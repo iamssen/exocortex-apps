@@ -1,8 +1,11 @@
-import type { CartesianChartAxis } from './CartesianChart.tsx';
-import { useCartesianChart } from './CartesianChart.context.ts';
 import { scaleTime } from 'd3-scale';
 import type { ReactElement, ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
+import { useCartesianChart } from './CartesianChart.context.ts';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 export interface BarMarker {
   value: number;
@@ -22,13 +25,15 @@ export interface HorizontalBarMarkersProps
   y: number;
 }
 
-export function HorizontalBarMarkers({
+export const HorizontalBarMarkers: CartesianChartSvgComponent<
+  HorizontalBarMarkersProps
+> = ({
   markers: _markers,
   axis,
   style,
   y,
   ...props
-}: HorizontalBarMarkersProps): ReactNode {
+}: HorizontalBarMarkersProps): ReactNode => {
   const { width } = useCartesianChart();
 
   const xScale = useMemo(
@@ -56,4 +61,6 @@ export function HorizontalBarMarkers({
       {markers}
     </g>
   );
-}
+};
+
+HorizontalBarMarkers.isSVG = true;

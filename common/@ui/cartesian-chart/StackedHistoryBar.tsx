@@ -4,7 +4,10 @@ import { scaleLinear, scaleTime } from 'd3-scale';
 import type { CSSProperties, ReactElement, ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 export interface StackedHistoryBarValue {
   name: string;
@@ -32,7 +35,9 @@ export interface StackedHistoryBarProps
   hideValues?: boolean;
 }
 
-export function StackedHistoryBar({
+export const StackedHistoryBar: CartesianChartSvgComponent<
+  StackedHistoryBarProps
+> = ({
   formatString,
   formatReplacer = '',
   records,
@@ -40,7 +45,7 @@ export function StackedHistoryBar({
   style,
   hideValues = false,
   ...props
-}: StackedHistoryBarProps): ReactNode {
+}: StackedHistoryBarProps): ReactNode => {
   const format = useFormat(formatString, formatReplacer);
 
   const { width, height } = useCartesianChart();
@@ -127,4 +132,6 @@ export function StackedHistoryBar({
       {elements}
     </g>
   );
-}
+};
+
+StackedHistoryBar.isSVG = true;

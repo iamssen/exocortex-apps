@@ -3,7 +3,10 @@ import { scaleTime } from 'd3-scale';
 import type { ReactNode, SVGProps } from 'react';
 import { Fragment, useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 export interface EventIndicatorProps extends SVGProps<SVGGElement> {
   axis: CartesianChartAxis;
@@ -11,13 +14,15 @@ export interface EventIndicatorProps extends SVGProps<SVGGElement> {
   baseY?: number;
 }
 
-export function EventIndicator({
+export const EventIndicator: CartesianChartSvgComponent<
+  EventIndicatorProps
+> = ({
   axis,
   style,
   data,
   baseY = 20,
   ...props
-}: EventIndicatorProps): ReactNode {
+}: EventIndicatorProps): ReactNode => {
   const { width, height } = useCartesianChart();
 
   const xScale = useMemo(
@@ -89,4 +94,6 @@ export function EventIndicator({
       {spotEvents}
     </g>
   );
-}
+};
+
+EventIndicator.isSVG = true;

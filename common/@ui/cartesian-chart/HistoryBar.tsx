@@ -3,7 +3,10 @@ import { scaleLinear, scaleTime } from 'd3-scale';
 import type { ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 export interface HistoryBarRecord {
   timestamps: [number, number];
@@ -19,12 +22,12 @@ export interface HistoryBarProps extends HistoryBarData, SVGProps<SVGGElement> {
   axis: CartesianChartAxis;
 }
 
-export function HistoryBar({
+export const HistoryBar: CartesianChartSvgComponent<HistoryBarProps> = ({
   records,
   axis,
   style,
   ...props
-}: HistoryBarProps): ReactNode {
+}: HistoryBarProps): ReactNode => {
   const { width, height } = useCartesianChart();
 
   const xScale = useMemo(
@@ -62,4 +65,6 @@ export function HistoryBar({
       {rects}
     </g>
   );
-}
+};
+
+HistoryBar.isSVG = true;

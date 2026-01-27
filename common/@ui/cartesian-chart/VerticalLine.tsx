@@ -2,7 +2,10 @@ import { scaleTime } from 'd3-scale';
 import type { ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 export interface VerticalLineProps extends SVGProps<SVGGElement> {
   label?: string;
@@ -10,13 +13,13 @@ export interface VerticalLineProps extends SVGProps<SVGGElement> {
   value: number;
 }
 
-export function VerticalLine({
+export const VerticalLine: CartesianChartSvgComponent<VerticalLineProps> = ({
   label,
   axis,
   value,
   style,
   ...props
-}: VerticalLineProps): ReactNode {
+}: VerticalLineProps): ReactNode => {
   const { width, height } = useCartesianChart();
 
   const xScale = useMemo(
@@ -51,4 +54,6 @@ export function VerticalLine({
       {textElements}
     </g>
   );
-}
+};
+
+VerticalLine.isSVG = true;

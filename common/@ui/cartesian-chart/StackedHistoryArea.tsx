@@ -4,7 +4,10 @@ import { area, line } from 'd3-shape';
 import type { CSSProperties, ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 interface Record {
   x: number;
@@ -30,14 +33,16 @@ export interface StackedHistoryAreaProps
   axis: CartesianChartAxis;
 }
 
-export function StackedHistoryArea({
+export const StackedHistoryArea: CartesianChartSvgComponent<
+  StackedHistoryAreaProps
+> = ({
   records,
   styles,
   axis,
   style,
   drawLine = true,
   ...props
-}: StackedHistoryAreaProps): ReactNode {
+}: StackedHistoryAreaProps): ReactNode => {
   const { width, height } = useCartesianChart();
 
   const xScale = useMemo(
@@ -121,4 +126,6 @@ export function StackedHistoryArea({
           ))}
     </g>
   );
-}
+};
+
+StackedHistoryArea.isSVG = true;

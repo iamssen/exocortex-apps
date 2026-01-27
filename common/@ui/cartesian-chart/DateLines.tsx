@@ -4,7 +4,10 @@ import { DateTime } from 'luxon';
 import type { ReactNode, SVGProps } from 'react';
 import { Fragment, useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 export interface DateLinesData {
   timezone: string;
@@ -14,12 +17,12 @@ export interface DateLinesProps extends DateLinesData, SVGProps<SVGGElement> {
   axis: CartesianChartAxis;
 }
 
-export function DateLines({
+export const DateLines: CartesianChartSvgComponent<DateLinesProps> = ({
   timezone,
   axis,
   style,
   ...props
-}: DateLinesProps): ReactNode {
+}: DateLinesProps): ReactNode => {
   const { width, height } = useCartesianChart();
 
   const xScale = useMemo(
@@ -63,7 +66,7 @@ export function DateLines({
       ))}
     </g>
   );
-}
+};
 
 interface DateFlag {
   label: string;
@@ -120,3 +123,5 @@ function getStartDate(
     };
   }
 }
+
+DateLines.isSVG = true;

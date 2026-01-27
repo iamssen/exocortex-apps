@@ -5,7 +5,10 @@ import { line } from 'd3-shape';
 import type { ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 import { getHistoryLineLastRecord } from './getHistoryLineLastRecord.ts';
 
 export interface HistoryLineRecord {
@@ -31,7 +34,7 @@ export interface HistoryLineProps
 
 const ARROW_LEFT_MARGIN = -4;
 
-export function HistoryLine({
+export const HistoryLine: CartesianChartSvgComponent<HistoryLineProps> = ({
   formatString,
   formatReplacer = '',
   records,
@@ -40,7 +43,7 @@ export function HistoryLine({
   hideHighAndLow = false,
   hideLast = false,
   ...props
-}: HistoryLineProps): ReactNode {
+}: HistoryLineProps): ReactNode => {
   const format = useFormat(formatString, formatReplacer);
 
   const { width, height } = useCartesianChart();
@@ -128,7 +131,9 @@ export function HistoryLine({
       {last}
     </g>
   );
-}
+};
+
+HistoryLine.isSVG = true;
 
 function clamp(min: number, value: number, max: number): number {
   return Math.max(min, Math.min(max, value));

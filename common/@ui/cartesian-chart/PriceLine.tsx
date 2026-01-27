@@ -1,7 +1,10 @@
 import { useFormat } from '@ssen/format';
 import type { ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 import { HorizontalLine } from './HorizontalLine.tsx';
 
 export interface PriceLineData {
@@ -16,7 +19,7 @@ export interface PriceLineProps extends PriceLineData, SVGProps<SVGGElement> {
   hideNumber?: boolean;
 }
 
-export function PriceLine({
+export const PriceLine: CartesianChartSvgComponent<PriceLineProps> = ({
   formatString,
   formatReplacer = '',
   price,
@@ -25,7 +28,7 @@ export function PriceLine({
   hideNumber = false,
   style,
   ...props
-}: PriceLineProps): ReactNode {
+}: PriceLineProps): ReactNode => {
   const format = useFormat(formatString, formatReplacer);
 
   const label = useMemo(() => {
@@ -45,4 +48,6 @@ export function PriceLine({
       data-wait-for={watchFor}
     />
   );
-}
+};
+
+PriceLine.isSVG = true;

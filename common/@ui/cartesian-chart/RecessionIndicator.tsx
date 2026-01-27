@@ -4,17 +4,18 @@ import { scaleTime } from 'd3-scale';
 import type { ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 export interface RecessionIndicatorProps extends SVGProps<SVGGElement> {
   axis: CartesianChartAxis;
 }
 
-export function RecessionIndicator({
-  axis,
-  style,
-  ...props
-}: RecessionIndicatorProps): ReactNode {
+export const RecessionIndicator: CartesianChartSvgComponent<
+  RecessionIndicatorProps
+> = ({ axis, style, ...props }: RecessionIndicatorProps): ReactNode => {
   const { data: recessionData } = useQuery(api('finance/recession'));
 
   const { width, height } = useCartesianChart();
@@ -60,4 +61,6 @@ export function RecessionIndicator({
       {rects}
     </g>
   );
-}
+};
+
+RecessionIndicator.isSVG = true;

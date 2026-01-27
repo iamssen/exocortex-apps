@@ -3,7 +3,10 @@ import { scaleLinear } from 'd3-scale';
 import type { ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 export interface TradePointsData {
   trades: (JoinedTrade | Trade)[];
@@ -14,12 +17,12 @@ export interface TradePointsProps
   axis: CartesianChartAxis;
 }
 
-export function TradePoints({
+export const TradePoints: CartesianChartSvgComponent<TradePointsProps> = ({
   trades,
   axis,
   style,
   ...props
-}: TradePointsProps): ReactNode {
+}: TradePointsProps): ReactNode => {
   const { width, height } = useCartesianChart();
 
   const xScale = useMemo(
@@ -57,4 +60,6 @@ export function TradePoints({
       {circleElements}
     </g>
   );
-}
+};
+
+TradePoints.isSVG = true;

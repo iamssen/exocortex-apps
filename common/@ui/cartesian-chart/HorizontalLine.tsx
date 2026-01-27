@@ -2,7 +2,10 @@ import { scaleLinear } from 'd3-scale';
 import type { ReactNode, SVGProps } from 'react';
 import { useMemo } from 'react';
 import { useCartesianChart } from './CartesianChart.context.ts';
-import type { CartesianChartAxis } from './CartesianChart.tsx';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from './CartesianChart.spec.ts';
 
 export interface HorizontalLineProps extends SVGProps<SVGGElement> {
   label?: string;
@@ -10,13 +13,15 @@ export interface HorizontalLineProps extends SVGProps<SVGGElement> {
   value: number;
 }
 
-export function HorizontalLine({
+export const HorizontalLine: CartesianChartSvgComponent<
+  HorizontalLineProps
+> = ({
   label,
   axis,
   value,
   style,
   ...props
-}: HorizontalLineProps): ReactNode {
+}: HorizontalLineProps): ReactNode => {
   const { width, height } = useCartesianChart();
 
   const yScale = useMemo(
@@ -51,4 +56,6 @@ export function HorizontalLine({
       {textElements}
     </g>
   );
-}
+};
+
+HorizontalLine.isSVG = true;
