@@ -41,5 +41,6 @@
       "@ui/*": ["./common/@ui/*/index.ts"]
     }
   },
-  "include": ["common", "apps", "vite-env.d.ts"]
+  "include": ["common", "apps", "vite-env.d.ts"],
+  "exclude": ["**/vite.config.mts"]
 }

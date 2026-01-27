@@ -3,13 +3,14 @@ import prettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import storybook from 'eslint-plugin-storybook';
 import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default [
   {
-    ignores: ['dist'],
+    ignores: ['**/dist'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -93,4 +94,5 @@ export default [
     files: ['**/*.{js,jsx,mjs,cjs}'],
     rules: tseslint.configs.disableTypeChecked.rules,
   },
+  ...storybook.configs['flat/recommended'],
 ];
