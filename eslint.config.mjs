@@ -95,4 +95,10 @@ export default [
     rules: tseslint.configs.disableTypeChecked.rules,
   },
   ...storybook.configs['flat/recommended'],
+  {
+    files: [`**/@libs/**/*.{ts,tsx,mts,cts}`],
+    rules: {
+      'no-restricted-imports': ['error', { patterns: ['@ui/*'] }],
+    },
+  },
 ];
