@@ -1,5 +1,5 @@
 import type { Quote } from '@iamssen/exocortex';
-import { Format, FormatConfig } from '@ssen/format';
+import { Format, FormatConfig } from '@libs/format';
 import type { ExtendedSummary } from '@ui/data-utils';
 import type { DetailedHTMLProps, HTMLAttributes, ReactNode } from 'react';
 import { Fragment } from 'react';

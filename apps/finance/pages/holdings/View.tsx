@@ -4,9 +4,9 @@ import type {
   Quote,
 } from '@iamssen/exocortex';
 import { joinHoldingsAndQuotes } from '@iamssen/exocortex/projector';
-import type { CurrencyType } from '@ssen/format';
-import { Format, Scope } from '@ssen/format';
-import { useLocalStorage, useLocalStorageJson } from '@ssen/use-local-storage';
+import type { CurrencyType } from '@libs/format';
+import { Format, Scope } from '@libs/format';
+import { useLocalStorage, useLocalStorageJson } from '@libs/use-local-storage';
 import { useQuery } from '@tanstack/react-query';
 import { useQuotes, useQuoteStatistics } from '@ui/data-utils';
 import type {

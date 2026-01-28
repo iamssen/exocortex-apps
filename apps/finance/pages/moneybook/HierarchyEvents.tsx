@@ -1,5 +1,5 @@
 import type { ASC, MoneybookEvent } from '@iamssen/exocortex';
-import { Format } from '@ssen/format';
+import { Format } from '@libs/format';
 import type { DetailedHTMLProps, HTMLAttributes, ReactNode } from 'react';
 import { useMemo } from 'react';
 import { Link } from 'react-router';

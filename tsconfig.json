@@ -37,10 +37,10 @@
 
     /* Project */
     "paths": {
-      "@ssen/*": ["./common/@ssen/*/index.ts"],
-      "@ui/*": ["./common/@ui/*/index.ts"]
+      "@libs/*": ["./apps/@libs/*/index.ts"],
+      "@ui/*": ["./apps/@ui/*/index.ts"]
     }
   },
-  "include": ["common", "apps", "vite-env.d.ts"],
+  "include": ["apps", "vite-env.d.ts"],
   "exclude": ["**/vite.config.mts"]
 }

@@ -1,4 +1,4 @@
-import { Format, FormatConfig } from '@ssen/format';
+import { Format, FormatConfig } from '@libs/format';
 import type { ExtendedSummary } from '@ui/data-utils';
 import type { DetailedHTMLProps, HTMLAttributes, ReactNode } from 'react';
 

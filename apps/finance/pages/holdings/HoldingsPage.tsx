@@ -1,4 +1,4 @@
-import { FormatConfig } from '@ssen/format';
+import { FormatConfig } from '@libs/format';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@ui/query';
 import type { ReactNode } from 'react';

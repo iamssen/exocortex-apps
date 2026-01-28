@@ -1,5 +1,5 @@
 import type { MoneybookHistory } from '@iamssen/exocortex';
-import { Format } from '@ssen/format';
+import { Format } from '@libs/format';
 import type { ScaleOrdinal } from 'd3-scale';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';

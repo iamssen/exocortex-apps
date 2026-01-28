@@ -1,4 +1,4 @@
-import { Format } from '@ssen/format';
+import { Format } from '@libs/format';
 import { useQuery } from '@tanstack/react-query';
 import { PositionBar } from '@ui/charts';
 import { TradesGrid } from '@ui/grids';
