@@ -1,6 +1,9 @@
 import type { Iso8601 } from '@iamssen/exocortex';
 import { useFormat } from '@libs/format';
-import type { CartesianChartAxis } from '@ui/cartesian-chart';
+import type {
+  CartesianChartAxis,
+  CartesianChartSvgComponent,
+} from '@ui/cartesian-chart';
 import { useCartesianChart } from '@ui/cartesian-chart';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import type { ReactNode, SVGProps, SVGTextElementAttributes } from 'react';
@@ -23,14 +26,14 @@ export interface BarProps extends BarData, SVGProps<SVGGElement> {
   axis: CartesianChartAxis;
 }
 
-export function Bar({
+export const Bar: CartesianChartSvgComponent<BarProps> = ({
   formatString,
   formatReplacer = '',
   records,
   axis,
   style,
   ...props
-}: BarProps): ReactNode {
+}: BarProps): ReactNode => {
   const format = useFormat(formatString, formatReplacer);
 
   const { width, height } = useCartesianChart();
@@ -113,4 +116,6 @@ export function Bar({
       {...rects}
     </g>
   );
-}
+};
+
+Bar.isSVG = true;
