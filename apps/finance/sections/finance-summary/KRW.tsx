@@ -78,58 +78,66 @@ export function KRW({ portfolio, view, ...props }: KRWProps): ReactNode {
               </dd>
             </Fragment>
           ))}
-        <dt>Deposits</dt>
-        <dd>
-          <Format format="KRW" n={portfolio.deposits.kr.totalAmount} />
-        </dd>
-        {view === 'simple' && (
-          <DepositsGainList
-            gain={portfolio.deposits.kr.gain}
-            staledGain={staledDepositsGain}
-            currency="KRW"
-          />
+        {portfolio.deposits.kr.list.length > 0 && (
+          <>
+            <dt>Deposits</dt>
+            <dd>
+              <Format format="KRW" n={portfolio.deposits.kr.totalAmount} />
+            </dd>
+            {view === 'simple' && (
+              <DepositsGainList
+                gain={portfolio.deposits.kr.gain}
+                staledGain={staledDepositsGain}
+                currency="KRW"
+              />
+            )}
+            {view === 'detail' &&
+              portfolio.deposits.kr.list.map(
+                ({ name, end, amount, interestIncome }) => (
+                  <Fragment key={`kr-depogit-${name}-${end}`}>
+                    <dt data-depth="1">
+                      <time dateTime={end}>
+                        {end} <ImpendCount date={end} />
+                      </time>
+                    </dt>
+                    <dd>
+                      <Format format="KRW" n={amount} />
+                    </dd>
+                    <dt data-depth="2"></dt>
+                    <dd>
+                      +<Format format="KRW" n={interestIncome} />
+                    </dd>
+                  </Fragment>
+                ),
+              )}
+          </>
         )}
-        {view === 'detail' &&
-          portfolio.deposits.kr.list.map(
-            ({ name, end, amount, interestIncome }) => (
-              <Fragment key={`kr-depogit-${name}-${end}`}>
-                <dt data-depth="1">
-                  <time dateTime={end}>
-                    {end} <ImpendCount date={end} />
-                  </time>
-                </dt>
-                <dd>
-                  <Format format="KRW" n={amount} />
-                </dd>
-                <dt data-depth="2"></dt>
-                <dd>
-                  +<Format format="KRW" n={interestIncome} />
-                </dd>
-              </Fragment>
-            ),
-          )}
-        <dt>Bonds</dt>
-        <dd>
-          <Format format="KRW" n={portfolio.bonds.kr.totalAmount} />
-        </dd>
-        {view === 'simple' && (
-          <BondsGainList
-            gain={portfolio.bonds.kr.gain}
-            staledGain={staledBondsGain}
-            currency="KRW"
-          />
+        {portfolio.bonds.kr.list.length > 0 && (
+          <>
+            <dt>Bonds</dt>
+            <dd>
+              <Format format="KRW" n={portfolio.bonds.kr.totalAmount} />
+            </dd>
+            {view === 'simple' && (
+              <BondsGainList
+                gain={portfolio.bonds.kr.gain}
+                staledGain={staledBondsGain}
+                currency="KRW"
+              />
+            )}
+            {view === 'detail' && (
+              <BondsList
+                list={portfolio.bonds.kr.list}
+                currency="KRW"
+                getCouponTax={getCouponTax}
+              />
+            )}
+            <dt>Housing</dt>
+            <dd>
+              <Format format="KRW" n={portfolio.housing.totalAmount} />
+            </dd>
+          </>
         )}
-        {view === 'detail' && (
-          <BondsList
-            list={portfolio.bonds.kr.list}
-            currency="KRW"
-            getCouponTax={getCouponTax}
-          />
-        )}
-        <dt>Housing</dt>
-        <dd>
-          <Format format="KRW" n={portfolio.housing.totalAmount} />
-        </dd>
       </dl>
     </section>
   );

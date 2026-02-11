@@ -1,5 +1,6 @@
 import type { BondsGain } from '@iamssen/exocortex';
-import { reduceBondsGain } from '@iamssen/exocortex/projector';
+import type { CollapseYearsResult } from '@iamssen/exocortex/date-utils';
+import { collapseYears } from '@iamssen/exocortex/date-utils';
 import type { CurrencyType } from '@libs/format';
 import { Format } from '@libs/format';
 import type { ReactNode } from 'react';
@@ -19,13 +20,14 @@ export function BondsGainList({
   staledGain,
   currency,
 }: BondsGainListProps): ReactNode {
-  const { before, after } = useMemo(() => {
-    return reduceBondsGain(gain, filterFromYear, reduceFromYear);
-  }, [gain]);
+  const { list, collapsed } = useMemo(
+    () => collapseYears(gain, 'year', filterFromYear, reduceFromYear),
+    [gain],
+  );
 
   return (
     <>
-      {before.map(({ year, couponGain, maturityGain }) => (
+      {list.map(({ year, couponGain, maturityGain }) => (
         <Fragment key={`bonds-gain-${year}`}>
           <dt data-depth="1">{year}</dt>
           <dd>
@@ -47,11 +49,38 @@ export function BondsGainList({
           </dd>
         </Fragment>
       ))}
+      {collapsed && <Collapsed currency={currency} {...collapsed} />}
+    </>
+  );
+}
+
+function Collapsed({
+  from,
+  to,
+  list,
+  currency,
+}: NonNullable<CollapseYearsResult<BondsGain>['collapsed']> & {
+  currency: CurrencyType;
+}) {
+  const { couponGain, maturityGain } = useMemo(
+    () =>
+      list.reduce(
+        (acc, item) => ({
+          couponGain: acc.couponGain + item.couponGain,
+          maturityGain: acc.maturityGain + item.maturityGain,
+        }),
+        { couponGain: 0, maturityGain: 0 },
+      ),
+    [list],
+  );
+
+  return (
+    <>
       <dt data-depth="1">
-        {after.from} ~ {after.to}
+        {from} ~ {to}
       </dt>
       <dd>
-        <Format format={currency} n={after.couponGain + after.maturityGain} />
+        <Format format={currency} n={couponGain + maturityGain} />
       </dd>
     </>
   );

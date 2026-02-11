@@ -63,23 +63,27 @@ export function USD({ portfolio, view, ...props }: USDProps): ReactNode {
               </dd>
             </Fragment>
           ))}
-        <dt>Bonds</dt>
-        <dd>
-          <Format format="USD" n={portfolio.bonds.us.totalAmount} />
-        </dd>
-        {view === 'simple' && (
-          <BondsGainList
-            gain={portfolio.bonds.us.gain}
-            staledGain={staledBondsGain}
-            currency="USD"
-          />
-        )}
-        {view === 'detail' && (
-          <BondsList
-            list={portfolio.bonds.us.list}
-            currency="USD"
-            getCouponTax={getCouponTax}
-          />
+        {portfolio.bonds.us.list.length > 0 && (
+          <>
+            <dt>Bonds</dt>
+            <dd>
+              <Format format="USD" n={portfolio.bonds.us.totalAmount} />
+            </dd>
+            {view === 'simple' && (
+              <BondsGainList
+                gain={portfolio.bonds.us.gain}
+                staledGain={staledBondsGain}
+                currency="USD"
+              />
+            )}
+            {view === 'detail' && (
+              <BondsList
+                list={portfolio.bonds.us.list}
+                currency="USD"
+                getCouponTax={getCouponTax}
+              />
+            )}
+          </>
         )}
       </dl>
     </section>

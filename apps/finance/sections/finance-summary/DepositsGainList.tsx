@@ -1,5 +1,6 @@
 import type { DepositsGain } from '@iamssen/exocortex';
-import { reduceDepositsGain } from '@iamssen/exocortex/projector';
+import type { CollapseYearsResult } from '@iamssen/exocortex/date-utils';
+import { collapseYears } from '@iamssen/exocortex/date-utils';
 import type { CurrencyType } from '@libs/format';
 import { Format } from '@libs/format';
 import type { ReactNode } from 'react';
@@ -19,13 +20,14 @@ export function DepositsGainList({
   staledGain,
   currency,
 }: DepositsGainListProps): ReactNode {
-  const { before, after } = useMemo(() => {
-    return reduceDepositsGain(gain, filterFromYear, reduceFromYear);
-  }, [gain]);
+  const { list, collapsed } = useMemo(
+    () => collapseYears(gain, 'year', filterFromYear, reduceFromYear),
+    [gain],
+  );
 
   return (
     <>
-      {before.map(({ year, interestGain }) => (
+      {list.map(({ year, interestGain }) => (
         <Fragment key={`deposits-gain-${year}`}>
           <dt data-depth="1">{year}</dt>
           <dd>
@@ -43,11 +45,37 @@ export function DepositsGainList({
           </dd>
         </Fragment>
       ))}
+      {collapsed && <Collapsed {...collapsed} currency={currency} />}
+    </>
+  );
+}
+
+function Collapsed({
+  from,
+  to,
+  list,
+  currency,
+}: NonNullable<CollapseYearsResult<DepositsGain>['collapsed']> & {
+  currency: CurrencyType;
+}) {
+  const { interestGain } = useMemo(
+    () =>
+      list.reduce(
+        (acc, item) => ({
+          interestGain: acc.interestGain + item.interestGain,
+        }),
+        { interestGain: 0 },
+      ),
+    [list],
+  );
+
+  return (
+    <>
       <dt data-depth="1">
-        {after.from} ~ {after.to}
+        {from} ~ {to}
       </dt>
       <dd>
-        <Format format={currency} n={after.interestGain} />
+        <Format format={currency} n={interestGain} />
       </dd>
     </>
   );

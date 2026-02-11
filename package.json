@@ -32,7 +32,7 @@
     ]
   },
   "dependencies": {
-    "@iamssen/exocortex": "0.0.10",
+    "@iamssen/exocortex": "0.0.13",
     "@tanstack/react-query": "^5.90.20",
     "@tiptap/core": "^3.17.1",
     "@tiptap/extension-list": "^3.17.1",
